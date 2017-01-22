@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="pull-to-refresh.css">
+    <style>
+        p {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="pull-to-refresh_layer">
+    <div class="pull-to-refresh-arrow">↓</div>
+    <div class="pull-to-refresh-preloader"></div>
+    <div class="down">下拉刷新</div>
+    <div class="up">释放刷新</div>
+    <div class="refresh">正在刷新</div>
+</div>
+<div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, architecto at aut
+        beatae dignissimos eaque est ex fugi
+        at incidunt inventore natus nemo nostru
+        m omnis quos repellat ut voluptas!
+    </p>
+
+</div>
+<script src="../jquery-1.8.3.min.js"></script>
+<script src="pull-to-refresh.js"></script>
+<script>
+    $(function () {
+        $(document.body).pullToRefresh().on('pull-to-refresh', function () {
+            setTimeout(function () {
+                $(document.body).pullToRefreshDone();
+            }, 2000)
+        });
+    })
+</script>
+</body>
+</html>

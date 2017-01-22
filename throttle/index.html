@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="wrapper"></div>
+<script>
+    var throttle = function(fn, delay){
+        var timer = null;
+        return function(){
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                fn.apply(context, args);
+            }, delay);
+        };
+    };
+
+    function throttle2(method, context) {
+        clearTimeout(method.tId);
+        method.tId = setTimeout(function(){
+            method.call(context);
+        }, 1000);
+    }
+    function myFunc() {
+        console.log("aaa")
+    }
+    document.getElementById("wrapper").innerHTML = '<div id="box" style="width: 500px;height:500px;background-color: #000"></div>'
+
+    document.getElementById("box").onclick = function () {
+        throttle2(myFunc, window);
+    };
+//    window.onclick = throttle(function () {
+//        console.log("www")
+//    }, 1000);
+</script>
+</body>
+</html>

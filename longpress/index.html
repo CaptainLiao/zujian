@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <script type="text/javascript" src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+<div style="width:100%;">
+    <div id="touchArea" style="width:90%; height:200px; background-color:#CCC;font-size:100px">长按我</div>
+</div>
+<script>
+    $(function(){
+        var timeOut = 0;
+        $("#touchArea").on({
+            touchstart: function (e) {
+                timeOut = setTimeout(longPress, 500);
+                return false;
+            },
+            touchmove: function (e) {
+                clearTimeout(timeOut);
+                timeOut = null;
+                return false;
+            },
+            touchend: function (e) {
+                clearTimeout(timeOut);
+                if(timeOut) alert("点击事件");
+                return false;
+            }
+        })
+    });
+
+
+    function longPress(){
+        timeOut = 0;
+        alert("长按事件触发发");
+    }
+
+</script>
+</body>
+</html>
