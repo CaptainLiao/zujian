@@ -1,0 +1,58 @@
+/*=================== 一、定义基本颜色 =====================*/
+
+/*---------------------------------------------------------------
+
+颜色基于微信weui：www.weui.io
+
+font-family:
+    -apple-system-font,Helvetica Neue,Helvetica,sans-serif
+
+font-color:
+    #000000     黑
+    #ffffff     白
+    #999999     灰
+
+background:
+    #EAEAEA     灰
+    #F8F8F8     浅灰
+
+border:
+    #D9D9D9     灰
+    #E9E9E9     浅灰
+
+button:
+    success(绿色，由深到浅)
+        #1AAD19     正常
+        #179B16     loading 状态
+        #9ED99D     disabled 状态
+
+    warn(红色，由深到浅)
+        #E64340     正常
+        #CE3C39     loading 状态
+        #EC8B89     disabled 状态
+
+    error
+        #F43530
+
+------------------------------------------------------------------------*/
+
+/*=================== 二、层级规范 ==================*/
+
+/*-----------------------------------------------------------------------
+Popout
+Mask
+Navigation
+Content
+-------------------------------------------------------------------------*/
+
+/*=================== 全局样式 ===================*/
+
+html,body {
+    font-family:-apple-system-font,Helvetica Neue,Helvetica,sans-serif, Mirosoft-Yahei;
+    font-size: 62.5%;
+}
+
+ul,li {
+    list-style: none;
+    padding: 0;
+}
