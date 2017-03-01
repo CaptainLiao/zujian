@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="format-detection" content="telphone=no, email=no" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,  user-scalable=0" name="viewport" />
+    <title>Upload</title>
+    <link rel="stylesheet" href="./upload.css">
+</head>
+<body>
+<div class="fui-upload clearfix">
+    <form action="" id="uploadForm" enctype="multipart/form-data" name="form">
+        <ul class="fui-upload_files">
+            <!-- 图片预览位置 -->
+        </ul>
+        <div class="fui-upload_input-box">
+            <input type="file" id="uploadInput" class="fui-upload_input" accept="image/jpg,image/jpeg,image/png" multiple/>
+        </div>
+        <button id="submit-btn" type="submit">提交</button>
+    </form>
+
+</div>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//at.alicdn.com/t/font_3hp4rtm2ziurqkt9.js"></script>
+<script src="./upload.js"></script>
+<script>
+    $(function () {
+        $("#submit-btn").upload({quality:1});
+    })
+</script>
+</body>
+</html>
