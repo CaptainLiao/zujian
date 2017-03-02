@@ -18,14 +18,14 @@
             <input type="file" id="uploadInput" class="fui-upload_input" accept="image/jpg,image/jpeg,image/png" multiple/>
         </div>
     </form>
-
     <button id="submit-btn" type="submit">提交</button>
 </div>
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="./upload.js"></script>
 <script>
     $(function () {
-        $("#submit-btn").upload({quality:1});
+        $("#submit-btn").upload({quality:1})    // 图片本地上传预览
+            .submit();      // 提交到服务器
     })
 </script>
 </body>

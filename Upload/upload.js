@@ -1,37 +1,34 @@
 !function(window, $, undefined) {
-    function Uploader(el, options, callback) {
-        var opts = $.extend({}, options);
+    function Uploader(el, opts, callback) {
         this.submitBtn = $(el);
+        this.n = 0;
         this.images = [];
-        // 是否开启debug
-        this.debug = opts.debug;
-        // 最多文件数
-        this.maxLen = opts.maxLen || 6;
-        this.maxSize = opts.maxSize || 6;
-        // 压缩最大分辨率(1000px)
-        this.maxWidth = opts.maxWidth || 1000;
-        // 压缩图片质量
-        this.quality = opts.quality || .8;
-        // 上传的其他参数
-        this.uploadParams = opts.uploadParams;
-        // 上传地址
-        this.apiURL = opts.url;
+        this.defaults = {
+            debug: false,
+            maxLen: 6,
+            maxSize: 6,
+            maxWidth: 1000,
+            quality: .8
+        };
+        this.options = $.extend({}, this.defaults, opts);
         // 成功后的回调
         this.callback = callback;
-        this.change();
-        this.submitClick();
     }
+    Uploader.prototype._tips = function (msg) {
+        alert(msg)
+    };
     Uploader.prototype.change = function () {
         var _this = this,
             uploadInput = document.getElementById('uploadInput');
         uploadInput.addEventListener('change', function () {
             // 使用jquery 取不到files
-            var files = this.files;
-            var len = files.length;
+            var files = this.files,
+                len = files.length,
+                maxLen = _this.options.maxLen;
             console.log(len);
             if(len == 0) return;
-            if(len > _this.maxLen || $('.fui-upload_file').length > _this.maxLen-1 || _this.images.length > 6) {
-                alert('不能超过'+_this.maxLen+'个图片');
+            if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > 6) {
+                _this._tips('不能超过'+maxLen+'个图片');
                 return;
             }
             // 遍历files，显示缩略图
@@ -40,9 +37,14 @@
                 // 得到图片地址（blob对象）
                 var url = window.URL.createObjectURL(file);
                 var type = file.type;
-                var maxSize = _this.maxSize;
+                var maxSize = _this.options.maxSize;
                 if(file.size > maxSize*1024*1024){
-                    alert('单张图片不能超过'+maxSize+'M');
+                    _this._tips('单张图片不能超过'+maxSize+'M');
+                    return;
+                }
+                ++_this.n;
+                if(_this.n > maxLen) {
+                    _this.n = maxLen;
                     return;
                 }
                 li +='<li class="fui-upload_file"><img src='+url+' alt='+file.name+'><span class="iconfont-fui fui-icon-close">&#xe60d;</span></li>';
@@ -52,7 +54,8 @@
             $('.fui-upload_files').append(li);
             // 删除图片
             _this.del();
-        })
+        });
+        return this;
     };
     Uploader.prototype.del = function () {
         var _this = this;
@@ -64,6 +67,7 @@
             _this.images.forEach(function (blob,index,arr) {
                 if(blob.name == name) {
                     arr.splice(index,1);
+                    --_this.n;
                 }
             });
         })
@@ -72,8 +76,8 @@
         var _this = this;
         createImageBitmap(file).then(function (imageBitmap) {
             var mimeType = "image/jpeg",
-                max_w = _this.maxWidth,
-                quality = _this.quality,
+                max_w = _this.options.maxWidth,
+                quality = _this.options.quality,
                 c_w = '',
                 c_h = '',
                 i_w = imageBitmap.width,
@@ -104,24 +108,25 @@
                 _this.images.push(blob);
             }, mimeType, quality);
         });
-        console.log(_this.images)
     };
-    Uploader.prototype.submit = function () {
-        var fd = new FormData(document.getElementById('uploadForm')),
+    Uploader.prototype.submitClick = function (url, param) {
+        var _this = this,
+            fd = new FormData(document.getElementById('uploadForm')),
             images = this.images,
-            params = this.uploadParams,
-            apiURL = this.apiURL,
-            debug = this.debug,
+            params = param,
+            apiURL = url,
+            debug = this.options.debug,
             callback = this.callback;
 
-        if(!apiURL) return;
         if(images.length>0) {
             images.forEach(function (img) {
                 fd.append('images', img)
             })
         }else {
-            alert('请选择图片后上传！')
+            _this._tips('请选择图片后上传！');
+            return;
         }
+        if(!apiURL) return;
         if(params && params instanceof Object && Object.keys(params).length> 0) {
             for(var key in params) {
                 if(Object.prototype.hasOwnProperty.call(params, key)) {
@@ -145,18 +150,23 @@
             }
         })
     };
-
-    Uploader.prototype.submitClick = function () {
+    /**
+     * submit 必填参数
+     *@param    {String}    url     上传服务器地址
+     *@param    {Object}    params    上传参数
+     */
+    Uploader.prototype.submit = function (url, params) {
         var _this = this;
         this.submitBtn.on('click', function (e) {
             console.log('aaa');
-            _this.submit();
+            _this.submitClick(url, params);
             e.preventDefault();
-        })
+        });
+        return this;
     };
 
     /**
-     * @param   {Object}    opts
+     * @param   {Object}    opts    可选参数
      *
      * opts: {
      *      debug: false,   默认关闭
@@ -164,15 +174,12 @@
      *      maxSize: 4, 最大上传图片尺寸(M)
      *      maxWidth: 1000,     输出的最大分辨率
      *      quality: .8,    输出图片的质量[0-1]
-     *      url: apiURL     上传服务器地址
-     *      uploadParams: {
-     *          ...
-     *      }
      * }
-     *
      */
     $.fn.upload = function (opts, callback) {
         console.log(this);
-        new Uploader(this, opts, callback);
+        var uploader = new Uploader(this, opts, callback);
+        return uploader.change();
+
     }
 }(window, jQuery);
