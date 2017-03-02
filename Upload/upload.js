@@ -109,15 +109,22 @@
             }, mimeType, quality);
         });
     };
-    Uploader.prototype.submitClick = function (url, param) {
+    /**
+     * submit 必填参数
+     *@param    {String}    url     上传服务器地址
+     *@param    {Object}    param    上传参数
+     */
+    Uploader.prototype.submit = function (url, param) {
         var _this = this,
             fd = new FormData(document.getElementById('uploadForm')),
             images = this.images,
+            submitBtn = this.submitBtn,
             params = param,
             apiURL = url,
             debug = this.options.debug,
             callback = this.callback;
-
+        console.log(param);
+        console.log(images);
         if(images.length>0) {
             images.forEach(function (img) {
                 fd.append('images', img)
@@ -126,13 +133,21 @@
             _this._tips('请选择图片后上传！');
             return;
         }
-        if(!apiURL) return;
-        if(params && params instanceof Object && Object.keys(params).length> 0) {
-            for(var key in params) {
-                if(Object.prototype.hasOwnProperty.call(params, key)) {
-                    fd.append(key, params[key]);
+        if(params) {
+            if(params instanceof Object && Object.keys(params).length> 0) {
+                for(var key in params) {
+                    if(Object.prototype.hasOwnProperty.call(params, key)) {
+                        fd.append(key, params[key]);
+                    }
                 }
             }
+        }else {
+            _this._tips('上传参数为空！');
+            return;
+        }
+        if(!apiURL) {
+            _this._tips('上传url为空！');
+            return;
         }
         $.ajax({
             url: apiURL,
@@ -141,28 +156,15 @@
             processData: false,
             contentType: false,
             beforeSend: function (xhr) {
-                $('[type="submit"]').prop('disabled', true)
+                //$('[type="submit"]').prop('disabled', true)
+                submitBtn.prop('disabled', true)
             },
             complete: function (res) {
-                $('[type="submit"]').prop('disabled', false);
+                submitBtn.prop('disabled', false);
                 if(debug) console.log(res.responseJSON);
                 callback && callback instanceof Function && callback(res);
             }
         })
-    };
-    /**
-     * submit 必填参数
-     *@param    {String}    url     上传服务器地址
-     *@param    {Object}    params    上传参数
-     */
-    Uploader.prototype.submit = function (url, params) {
-        var _this = this;
-        this.submitBtn.on('click', function (e) {
-            console.log('aaa');
-            _this.submitClick(url, params);
-            e.preventDefault();
-        });
-        return this;
     };
 
     /**
@@ -176,10 +178,15 @@
      *      quality: .8,    输出图片的质量[0-1]
      * }
      */
+    var uploader = '';
     $.fn.upload = function (opts, callback) {
         console.log(this);
-        var uploader = new Uploader(this, opts, callback);
+        uploader = new Uploader(this, opts, callback);
         return uploader.change();
+
+    };
+    $.fn.submit = function (url, opts) {
+        return uploader.submit(url, opts);
 
     }
 }(window, jQuery);

@@ -10,6 +10,7 @@
 </head>
 <body>
 <div class="fui-upload clearfix">
+    <textarea name="" id="box" cols="30" rows="10"></textarea>
     <form action="" id="uploadForm" enctype="multipart/form-data" name="form">
         <ul class="fui-upload_files">
             <!-- 图片预览位置 -->
@@ -24,8 +25,17 @@
 <script src="./upload.js"></script>
 <script>
     $(function () {
-        $("#submit-btn").upload({quality:1})    // 图片本地上传预览
-            .submit();      // 提交到服务器
+        var content = '';
+        $("#submit-btn")
+            .on('click', function () {
+                content = $("#box").val();
+                // 上传提交
+                $(this).submit('www.baid.com',{content: content})
+            })
+            // 图片本地上传预览
+            .upload({quality:1,debug: true});
+
+
     })
 </script>
 </body>
