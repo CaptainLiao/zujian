@@ -1,17 +1,23 @@
 !function(window, $, undefined) {
-    function Uploader(el, options) {
+    function Uploader(el, options, callback) {
         var opts = $.extend({}, options);
-        this.submit = $(el);
+        this.submitBtn = $(el);
         this.images = [];
+        // 是否开启debug
+        this.debug = opts.debug;
         // 最多文件数
         this.maxLen = opts.maxLen || 6;
         this.maxSize = opts.maxSize || 6;
         // 压缩最大分辨率(1000px)
         this.maxWidth = opts.maxWidth || 1000;
         // 压缩图片质量
-        this.quality = opts.quality || .7;
+        this.quality = opts.quality || .8;
         // 上传的其他参数
         this.uploadParams = opts.uploadParams;
+        // 上传地址
+        this.apiURL = opts.url;
+        // 成功后的回调
+        this.callback = callback;
         this.change();
         this.submitClick();
     }
@@ -39,14 +45,13 @@
                     alert('单张图片不能超过'+maxSize+'M');
                     return;
                 }
-                li +='<li class="fui-upload_file"><img src='+url+' alt='+file.name+'><svg class="icon fui-icon-close" aria-hidden="true"> <use xlink:href="#icon-close"></use> </svg></li>';
+                li +='<li class="fui-upload_file"><img src='+url+' alt='+file.name+'><span class="iconfont-fui fui-icon-close">&#xe60d;</span></li>';
                 _this.compress(file, type);
             });
             // 显示缩略图
             $('.fui-upload_files').append(li);
             // 删除图片
             _this.del();
-
         })
     };
     Uploader.prototype.del = function () {
@@ -102,17 +107,22 @@
         console.log(_this.images)
     };
     Uploader.prototype.submit = function () {
-        var fd = new FormData(document.getElementById('uploadForm'));
-        var images = this.images;
-        var params = this.uploadParams;
+        var fd = new FormData(document.getElementById('uploadForm')),
+            images = this.images,
+            params = this.uploadParams,
+            apiURL = this.apiURL,
+            debug = this.debug,
+            callback = this.callback;
+
+        if(!apiURL) return;
         if(images.length>0) {
             images.forEach(function (img) {
-                fd.append(image, img)
+                fd.append('images', img)
             })
         }else {
             alert('请选择图片后上传！')
         }
-        if(params && params instanceof Object && Object.keys(params)> 0) {
+        if(params && params instanceof Object && Object.keys(params).length> 0) {
             for(var key in params) {
                 if(Object.prototype.hasOwnProperty.call(params, key)) {
                     fd.append(key, params[key]);
@@ -126,22 +136,22 @@
             processData: false,
             contentType: false,
             beforeSend: function (xhr) {
-                
+                $('[type="submit"]').prop('disabled', true)
             },
-            success: function (res) {
-                console.log(res)
-            },
-            error: function (status, responseText) {
-                
+            complete: function (res) {
+                $('[type="submit"]').prop('disabled', false);
+                if(debug) console.log(res.responseJSON);
+                callback && callback instanceof Function && callback(res);
             }
         })
     };
 
     Uploader.prototype.submitClick = function () {
         var _this = this;
-        this.submit.on('click', function () {
-            console.log('aaa')
-            //_this.submit();
+        this.submitBtn.on('click', function (e) {
+            console.log('aaa');
+            _this.submit();
+            e.preventDefault();
         })
     };
 
@@ -149,6 +159,7 @@
      * @param   {Object}    opts
      *
      * opts: {
+     *      debug: false,   默认关闭
      *      maxLen: 6,      最多上传图片数量
      *      maxSize: 4, 最大上传图片尺寸(M)
      *      maxWidth: 1000,     输出的最大分辨率
@@ -160,27 +171,8 @@
      * }
      *
      */
-    $.fn.upload = function (opts) {
+    $.fn.upload = function (opts, callback) {
         console.log(this);
-        new Uploader(this, opts);
+        new Uploader(this, opts, callback);
     }
 }(window, jQuery);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

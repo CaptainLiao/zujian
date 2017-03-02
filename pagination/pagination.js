@@ -5,9 +5,11 @@
         this.index = 1;
         this.init();
         this.attachEvent();
+
     };
     Pagination.prototype.init = function (page) {
         var curPage = page ? page : 1;
+        console.log(this.index);
         this.container.html(this.showPage(curPage, this.total));
     };
     Pagination.prototype.showPage = function (page, totalPage) {
