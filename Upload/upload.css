@@ -28,11 +28,11 @@ img {
 /*=================== iconfont =======================*/
 @font-face {
     font-family: 'iconfont';  /* project id 237960 */
-    src: url('//at.alicdn.com/t/font_3hp4rtm2ziurqkt9.eot');
-    src: url('//at.alicdn.com/t/font_3hp4rtm2ziurqkt9.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_3hp4rtm2ziurqkt9.woff') format('woff'),
-    url('//at.alicdn.com/t/font_3hp4rtm2ziurqkt9.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_3hp4rtm2ziurqkt9.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_tngv06kr7o80k9.eot');
+    src: url('//at.alicdn.com/t/font_tngv06kr7o80k9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_tngv06kr7o80k9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_tngv06kr7o80k9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_tngv06kr7o80k9.svg#iconfont') format('svg');
 }
 .iconfont-fui{
     font-family:"iconfont"!important;
@@ -43,6 +43,52 @@ img {
 
 /*=====================开始========================*/
 
+
+
+.fui-upload_files {
+    padding: 0;
+    width: 360px;
+}
+
+.fui-upload_file {
+    position: relative;
+    margin-top: 6px;
+    padding: 4px 0 4px 4px;
+    border: 1px solid #E9E9E9;
+    border-radius: 8px;
+}
+
+.fui-upload_file img {
+    width: 72px;
+    height: 72px;
+}
+.fui-upload-filename {
+    position: absolute;
+    top: 50%;
+    left: 24%;
+    transform: translateY(-50%);
+    font-size: 1.6rem;
+}
+.fui-upload-filename:hover {
+    color: #9ED99D;
+    cursor: pointer;
+}
+.fui-icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 2rem;
+    color: #E64340;
+    cursor: pointer;
+}
+.fui-icon-close:after {
+    content: '\e60d';
+    font-family: 'iconfont';
+}
+.fui-icon-success {
+
+}
+
 /*--------------- 移动端 -----------------*/
 
 @media screen and (max-width: 720px) {
@@ -50,17 +96,30 @@ img {
 
     }
     .fui-upload_files {
-        padding: 0;
+        width: 100%;
     }
     .fui-upload_file {
         float: left;
-        position: relative;
         width: 72px;
         height: 72px;
+        margin-top: 0;
         margin-right: 9px;
         margin-bottom: 9px;
         background-color: #EAEAEA;
         overflow: hidden;
+    }
+    .fui-upload_file:after {
+        content:'\e655';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-family: 'iconfont';
+        font-size: 4rem;
+        color:#999999;
+        transform: translate(-50%,-50%);
+        transform-origin: center;
+        animation: loading 1s infinite linear;
+        opacity: 0;
     }
     .fui-upload_file img {
         width: 100%;
@@ -111,6 +170,20 @@ img {
         font-size: 2rem;
         color: #E64340;
         cursor: pointer;
+    }
+    .fui-icon-loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 4rem;
+        color:#999999;
+        transform: translate(-50%,-50%);
+        transform-origin: center;
+        animation: loading 1s infinite linear;
+    }
+    @keyframes loading {
+        from {transform: translate(-50%,-50%) rotate(0deg)}
+        to {transform: translate(-50%,-50%) rotate(360deg)}
     }
 
 }
