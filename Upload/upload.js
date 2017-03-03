@@ -71,7 +71,7 @@
                     _this.n = maxLen;
                     return;
                 }
-                li +='<li class="fui-upload_file"><img    src='+url+' alt='+file.name+'><span class="iconfont-fui fui-icon-close"></span></li>';
+                li +='<li class="fui-upload_file"><img src='+url+' alt='+file.name+'><a class="fui-upload-filename"><a class="fui-upload-progress"></a></a><span class="iconfont-fui fui-icon-close"></span></li>';
                 // 显示缩略图
 
                 _this.compress(file, type);
@@ -194,7 +194,7 @@
         function updateProgress(evt) {
             if (evt.lengthComputable) {
                 var percentComplete = evt.loaded / evt.total;
-                console.log(percentComplete);
+                $('.fui-upload-progress').width(percentComplete*70)
             } else {
                 alert('你的浏览器版本太低，不支持进度条！');
             }

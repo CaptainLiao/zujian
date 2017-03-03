@@ -185,6 +185,14 @@ img {
         from {transform: translate(-50%,-50%) rotate(0deg)}
         to {transform: translate(-50%,-50%) rotate(360deg)}
     }
+    .fui-upload-progress {
+        position: absolute;
+        top: 70%;
+        left: 8%;
+        height: 4px;
+        max-width: 68px;
+        background-color: red;
+    }
 
 }
 
