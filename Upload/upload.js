@@ -71,7 +71,11 @@
                     _this.n = maxLen;
                     return;
                 }
-                li +='<li class="fui-upload_file"><img src='+url+' alt='+file.name+'><a class="fui-upload-filename"><a class="fui-upload-progress"></a></a><span class="iconfont-fui fui-icon-close"></span></li>';
+                li +='<li class="fui-upload_file"><img src='+url+' alt='+file.name+'><a class="fui-upload-filename">'+file.name+'</a>' +
+                    '<div class="fui-upload-progressbar">'+
+                    '<div class="fui-progress-line1"></div>'+
+                    '<div class="fui-progress-line2"></div>'+
+                    '</div><span class="iconfont-fui fui-icon-close"></span></li>';
                 // 显示缩略图
 
                 _this.compress(file, type);
@@ -192,15 +196,20 @@
         xhr.send(fd);
 
         function updateProgress(evt) {
+            console.log(evt)
             if (evt.lengthComputable) {
+                console.log(evt.loaded);
                 var percentComplete = evt.loaded / evt.total;
-                $('.fui-upload-progress').width(percentComplete*70)
+                $('.fui-progress-line1').width(percentComplete*100+'%');
             } else {
                 alert('你的浏览器版本太低，不支持进度条！');
             }
         }
         function transferComplete(evt) {
-            alert("The transfer is complete.");
+            _this.timer = null;
+            _this.timer = setTimeout(function () {
+                $('.fui-upload-progressbar').fadeOut();
+            }, 500)
         }
         function transferFailed(evt) {
             alert("An error occurred while transferring the file.");
