@@ -184,6 +184,8 @@
             _this._tips('上传url为空！');
             return;
         }
+
+        $('.fui-upload-progressbar').show();
         var xhr = new XMLHttpRequest();
 
         xhr.upload.addEventListener("progress", updateProgress);

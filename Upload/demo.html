@@ -10,11 +10,10 @@
 </head>
 <body>
 <div class="fui-upload clearfix">
-    <textarea name="" id="box" cols="30" rows="10"></textarea>
     <form action="" id="uploadForm" enctype="multipart/form-data" name="form">
         <ul class="fui-upload_files">
             <!-- 图片预览位置 -->
-            <li class="fui-upload_file">
+            <!--<li class="fui-upload_file">
                 <img src="" alt="">
                 <a class="fui-upload-filename">sss</a>
                 <div class="fui-upload-progressbar">
@@ -22,14 +21,14 @@
                     <div class="fui-progress-line2"></div>
                 </div>
                 <span class="iconfont-fui fui-icon-close"></span>
-            </li>
+            </li>-->
         </ul>
 
         <div class="fui-upload_input-box">
             <input type="file" id="uploadInput" class="fui-upload_input" accept="image/jpg,image/jpeg,image/png" multiple/>
         </div>
     </form>
-    <button id="submit-btn" type="submit">提交</button>
+    <button id="submit-btn" class="fui-upload-submit" type="submit">提交</button>
 </div>
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="./upload.js"></script>
