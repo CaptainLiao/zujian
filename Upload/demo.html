@@ -6,14 +6,34 @@
     <meta name="format-detection" content="telphone=no, email=no" />
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,  user-scalable=0" name="viewport" />
     <title>Upload</title>
-    <link rel="stylesheet" href="./upload.css">
+    <link rel="stylesheet" href="./upload2.css">
 </head>
 <body>
-<div class="fui-upload clearfix">
+<div class="fui-upload">
+    上传图片
+</div>
+<div class="fui-upload_mask"></div>
+<div class="fui-upload_box">
+    <div class="fui-upload_choose">
+        <div class="fui-upload_input-box">
+            <div>点击选择文件</div>
+            <input id="uploadInput" class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">
+        </div>
+    </div>
+    <div class="fui-upload_status-bar clearfix">
+        <div class="fui-upload_info fl">0个文件，共0M</div>
+        <div class="fui-upload_btn fr">
+            <button class="fui-upload_add" type="button">继续添加</button>
+            <button class="fui-upload_submit" type="button">点击上传</button>
+        </div>
+    </div>
+    <div class="fui-upload_preview"></div>
+</div>
+<!--<div class="fui-upload clearfix">
     <form action="" id="uploadForm" enctype="multipart/form-data" name="form">
         <ul class="fui-upload_files">
-            <!-- 图片预览位置 -->
-            <!--<li class="fui-upload_file">
+            &lt;!&ndash; 图片预览位置 &ndash;&gt;
+            &lt;!&ndash;<li class="fui-upload_file">
                 <img src="" alt="">
                 <a class="fui-upload-filename">sss</a>
                 <div class="fui-upload-progressbar">
@@ -21,7 +41,7 @@
                     <div class="fui-progress-line2"></div>
                 </div>
                 <span class="iconfont-fui fui-icon-close"></span>
-            </li>-->
+            </li>&ndash;&gt;
         </ul>
 
         <div class="fui-upload_input-box">
@@ -29,7 +49,7 @@
         </div>
     </form>
     <button id="submit-btn" class="fui-upload-submit" type="submit">提交</button>
-</div>
+</div>-->
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="./upload.js"></script>
 <script>
