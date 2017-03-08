@@ -28,20 +28,18 @@
         </div>
     </div>
     <ul class="fui-upload_preview clearfix">
-       <li class="fui-upload_preview_item">
-           <img src="timg.jpg" alt="">
-       </li>
         <li class="fui-upload_preview_item">
             <img src="timg.jpg" alt="">
-        </li><li class="fui-upload_preview_item">
-        <img src="timg.jpg" alt="">
-    </li><li class="fui-upload_preview_item">
-        <img src="timg.jpg" alt="">
-    </li><li class="fui-upload_preview_item">
-        <img src="timg.jpg" alt="">
-    </li>
-
-
+        </li>
+        <li class="fui-upload_preview_item">
+            <img src="1.jpg" alt="">
+        </li>
+        <li class="fui-upload_preview_item">
+            <img src="timg.jpg" alt="">
+        </li>
+        <li class="fui-upload_preview_item">
+            <img src="timg.jpg" alt="">
+        </li>
 
     </ul>
 </div>
@@ -79,8 +77,25 @@
             })
             // 图片本地上传预览
             .upload({quality:1,debug: true});
+        var $img = $('.fui-upload_preview_item').find('img'),
+            i_w = '',
+            i_h = '';
+        $.each($img, function () {
+            var $this = $(this);
+            i_w = $this.width();
+            i_h = $this.height();
+            console.log(i_w)
+            console.log(i_h)
 
+            if(i_w > i_h) {
+                $this.width(100-12+'%')
+                $this.height('auto')
+            }else {
+                $this.width('auto')
+                $this.height(100-12+'%')
 
+            }
+        })
     })
 </script>
 </body>

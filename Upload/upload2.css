@@ -141,7 +141,7 @@ ul {
 }
 .fui-upload_preview {
     width: 700px;
-    margin: 12px auto 0;
+    margin: 12px auto;
 }
 .fui-upload_preview_item {
     position: relative;
