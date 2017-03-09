@@ -21,20 +21,47 @@
   </div>
   <script src='../jquery-1.8.3.min.js' type="text/javascript"></script>
   <script type="text/javascript">
-    $(function () {
+
+    function Matrix($el) {
+      this.$el = $el;
+      this.w = this.$el.width();
+      this.h = this.$el.height();
+      console.log(this.w)
+      console.log(this.h)
+
+    }
+
+    Matrix.prototype.scale = function() {
       var scale = 1;
-      $('.box').on('mousewheel', function(e, delta) {
+      var _this = this;
+      _this.$el.on('mousewheel', function(e, delta) {
         console.log(e)
-        var delta = e.originalEvent.wheelDelta || -e.originalEvent.delta;
+        var oEvent = e.originalEvent,
+        c_x = 0,
+        c_y = 0,
+        p_w = _this.w,
+        p_h = _this.h,
+        delta = oEvent.wheelDelta || -oEvent.delta;
         console.log(delta)
         if(delta > 0) {
          scale *= 1.2;
         }else {
-          scale *= .8333;
+        scale *= .8333;
         }
-         $(this).css('transform', 'matrix('+scale+', 0, 0, '+scale+', 0, 0)')
+        p_w *= scale;
+        p_h *= scale;
+        c_x = -(p_w - _this.w);
+        c_y = -(p_h - _this.h);
+        _this.w = p_w;
+        _this.h = p_h;
+        $(this).css('transform', 'matrix('+scale+', 0, 0, '+scale+', '+c_x+', '+c_y+')')
+        console.log(c_x)
+        console.log(c_y)
       })
-    })
+    }
+
+    var matrix = new Matrix($('.box'))
+    matrix.scale();
   </script>
 </body>
 </html>
