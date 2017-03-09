@@ -67,7 +67,7 @@
                     _this.n = maxLen;
                     return;
                 }
-                var thumbnail = {};
+               /* var thumbnail = {};
                 var reader = new FileReader();
                 reader.onload = function (event) {
                     console.log(event.target)
@@ -91,14 +91,15 @@
                         $('.fui-upload_preview').append(li);
                     }
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(file);*/
 
+                li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""></li>';
 
                 _this.compress(file, type);
             });
             // 显示缩略图
 
-
+            $('.fui-upload_preview').append(li);
 
             // 删除图片
             _this.del();
