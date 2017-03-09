@@ -104,6 +104,7 @@
             // 删除图片
             _this.del();
         });
+
         return this;
     };
     Uploader.prototype.del = function () {
@@ -127,24 +128,26 @@
         })
     };
     // 改变预览图片宽高比
-    Uploader.prototype.changeImg = function (file, cb) {
-        var thumbnail = {},
-            _this = this;
-        createImageBitmap(file).then(function (imageBitmap) {
-            var
-                i_w = imageBitmap.width,
-                i_h = imageBitmap.height;
+    Uploader.prototype.changeImg = function () {
+        var $img = $('.fui-upload_preview_item').find('img'),
+            i_w = '',
+            i_h = '';
+        $.each($img, function () {
+            var $this = $(this);
+            i_w = $this.width();
+            i_h = $this.height();
+            console.log(i_w)
+            console.log(i_h)
+
             if(i_w > i_h) {
-                thumbnail.width = 100-12+'%';
-                thumbnail.height = 'auto';
+                $this.width(100-12+'%')
+                $this.height('auto')
             }else {
-                thumbnail.height = 100-12+'%';
-                thumbnail.width = 'auto';
+                $this.width('auto')
+                $this.height(100-12+'%')
+
             }
-            cb && cb(thumbnail)
-        });
-        console.log(thumbnail)
-        return thumbnail;
+        })
     };
     Uploader.prototype.compress = function (file, img_type) {
         var _this = this;

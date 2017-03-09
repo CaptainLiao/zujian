@@ -150,6 +150,7 @@ ul {
     border: 1px solid #D9D9D9;
     float: left;
     margin: 0 12px 12px 0;
+    overflow: hidden;
 }
 .fui-upload_preview_item img {
     width: 100%;
