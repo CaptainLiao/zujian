@@ -37,9 +37,6 @@
         <li class="fui-upload_preview_item">
             <img src="timg.jpg" alt="">
         </li>
-        <li class="fui-upload_preview_item">
-            <img src="timg.jpg" alt="">
-        </li>
 
     </ul>
 </div>
@@ -65,10 +62,11 @@
     <button id="submit-btn" class="fui-upload-submit" type="submit">提交</button>
 </div>-->
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="./upload.js"></script>
+<!--<script src="./upload.js"></script>-->
+<script src="./upload2.js"></script>
 <script>
     $(function () {
-        var content = '';
+        /*var content = '';
         $("#submit-btn")
             .on('click', function () {
                 content = $("#box").val();
@@ -76,8 +74,17 @@
                 $(this).submit('www.baid.com',{content: content})
             })
             // 图片本地上传预览
-            .upload({quality:1,debug: true});
-        var $img = $('.fui-upload_preview_item').find('img'),
+            .upload({quality:1,debug: true});*/
+
+
+
+        /*======upload2.js========*/
+
+        $("#uploadInput").upload();
+
+
+
+/*        var $img = $('.fui-upload_preview_item').find('img'),
             i_w = '',
             i_h = '';
         $.each($img, function () {
@@ -95,7 +102,7 @@
                 $this.height(100-12+'%')
 
             }
-        })
+        })*/
     })
 </script>
 </body>
