@@ -67,8 +67,8 @@ ul {
     position: absolute;
     top: 10%;
     left: 50%;
-    margin-left: -400px;
-    width: 800px;
+    margin-left: -357px;
+    width: 714px;
     min-height: 300px;
     z-index: 999;
     background-color: #fff;
@@ -140,7 +140,8 @@ ul {
     margin-left: 12px;
 }
 .fui-upload_preview {
-    width: 700px;
+    width: 100%;
+    padding: 0 0 0 12px;
     margin: 12px auto;
 }
 .fui-upload_preview_item {
