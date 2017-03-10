@@ -52,20 +52,15 @@
         }else {
         scale *= .8;
         }
-
-
-        $(this).css('transform', 'matrix('+scale+', 0, 0, '+scale+', 1, 1)')
-          p_x = oEvent.clientX;
-          p_y = oEvent.clientY;
-          o_x = $(this).offset().left;
-          o_y = $(this).offset().top;
-          c_x = p_x - o_x;
-          c_y = p_y - o_y;
-          console.log(c_x)
-          console.log(c_y)
-          $(this).css('transform-origin', ''+c_x+', '+c_y+'');
+        p_x = (oEvent.clientX / $(window).width()) * 100;
+        p_y = (oEvent.clientY / $(window).height()) *100 ;
+        $(this).css({
+          'transform': 'scale('+scale+')',
+          'transform-origin':p_x+'% '+p_y+'%',
+          '-webkit-transform-origin': p_x+'% '+p_y+'%'
+        });
       })
-    }
+    };
 
     var matrix = new Matrix($('.box'))
     matrix.scale();
