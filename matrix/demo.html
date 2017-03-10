@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta content="telephone=no,email=no" name="format-detection">
   <title>transfrom matrix</title>
   <style type="text/css">
+    ul,li {
+      padding: 0;
+      margin: 0;
+    }
     .box {
       width: 300px;
       height: 280px;
@@ -13,57 +20,86 @@
     .box img {
       max-width: 100%;
     }
+    .fui-mask {
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      animation: jumpShow 500ms ease-in-out;
+    }
+    .hide{
+      display: none;
+    }
+    .fui-pop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 9999;
+      animation: jumpShow 500ms ease-in-out;
+    }
+    @keyframes jumpShow {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+    @keyframes jumpHide {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(0);
+      }
+    }
+    .fui-slider {
+      width: 10000%;
+      height: 100%;
+      position: absolute;
+    }
+    .fui-slider:after {
+      content: ' ';
+      display: inline-block;
+      height: 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .fui-slider-item {
+      width: 100%;
+      height: 100%;
+      float: left;
+      position: relative;
+    }
+    .fui-slider-item img {
+      width: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <img src="8e7075a2c6b7fb1e083914db000a70c5.jpg">
-  </div>
-  <script src='../jquery-1.8.3.min.js' type="text/javascript"></script>
-  <script type="text/javascript">
+<div class="box">
+  <img src="d1981a8ba21975314fd2edf9c09447bb.jpg">
+  <img src="8e7075a2c6b7fb1e083914db000a70c5.jpg">
+  <img src="d1981a8ba21975314fd2edf9c09447bb.jpg">
+</div>
 
-    function Matrix($el) {
-      this.$el = $el;
-      this.w = this.$el.width();
-      this.h = this.$el.height();
-      console.log(this.w)
-      console.log(this.h)
+<script src='../jquery-1.8.3.min.js' type="text/javascript"></script>
+<script src="zoom.js"></script>
+<script type="text/javascript">
 
-    }
-
-    Matrix.prototype.scale = function() {
-      var scale = 1;
-      var _this = this;
-      console.log(document.getElementsByClassName('box')[0].getBoundingClientRect());
-      console.log(_this.$el.offset().left);
-      _this.$el.on('mousewheel', function(e, delta) {
-        console.log(e)
-        var oEvent = e.originalEvent,
-        c_x = 0,
-        c_y = 0,
-        p_x = 0,
-        p_y = 0,
-        o_x = 0,
-        o_y = 0,
-        delta = oEvent.wheelDelta || -oEvent.delta;
-        console.log(delta)
-        if(delta > 0) {
-         scale *= 1.2;
-        }else {
-        scale *= .8;
-        }
-        p_x = (oEvent.clientX / $(window).width()) * 100;
-        p_y = (oEvent.clientY / $(window).height()) *100 ;
-        $(this).css({
-          'transform': 'scale('+scale+')',
-          'transform-origin':p_x+'% '+p_y+'%',
-          '-webkit-transform-origin': p_x+'% '+p_y+'%'
-        });
-      })
-    };
-
-    var matrix = new Matrix($('.box'))
-    matrix.scale();
-  </script>
+    $('.box').zoom();
+</script>
 </body>
 </html>
