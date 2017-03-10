@@ -34,29 +34,36 @@
     Matrix.prototype.scale = function() {
       var scale = 1;
       var _this = this;
+      console.log(document.getElementsByClassName('box')[0].getBoundingClientRect());
+      console.log(_this.$el.offset().left);
       _this.$el.on('mousewheel', function(e, delta) {
         console.log(e)
         var oEvent = e.originalEvent,
         c_x = 0,
         c_y = 0,
-        p_w = _this.w,
-        p_h = _this.h,
+        p_x = 0,
+        p_y = 0,
+        o_x = 0,
+        o_y = 0,
         delta = oEvent.wheelDelta || -oEvent.delta;
         console.log(delta)
         if(delta > 0) {
          scale *= 1.2;
         }else {
-        scale *= .8333;
+        scale *= .8;
         }
-        p_w *= scale;
-        p_h *= scale;
-        c_x = -(p_w - _this.w);
-        c_y = -(p_h - _this.h);
-        _this.w = p_w;
-        _this.h = p_h;
-        $(this).css('transform', 'matrix('+scale+', 0, 0, '+scale+', '+c_x+', '+c_y+')')
-        console.log(c_x)
-        console.log(c_y)
+
+
+        $(this).css('transform', 'matrix('+scale+', 0, 0, '+scale+', 1, 1)')
+          p_x = oEvent.clientX;
+          p_y = oEvent.clientY;
+          o_x = $(this).offset().left;
+          o_y = $(this).offset().top;
+          c_x = p_x - o_x;
+          c_y = p_y - o_y;
+          console.log(c_x)
+          console.log(c_y)
+          $(this).css('transform-origin', ''+c_x+', '+c_y+'');
       })
     }
 
