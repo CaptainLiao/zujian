@@ -35,11 +35,11 @@ button:
     error
         #F43530
 
-----------------------------------------------------------------*/
+        ----------------------------------------------------------------*/
 
-/*================================================*/
-/*=================== 二、层级规范 ==================*/
-/*================================================*/
+        /*================================================*/
+        /*=================== 二、层级规范 ==================*/
+        /*================================================*/
 /*-----------------------------------------------------------------
 Popout
 Mask
@@ -62,12 +62,30 @@ Content
 /*=================== 全局样式 ===================*/
 
 html,body {
-    font-family:-apple-system-font,Helvetica Neue,Helvetica,sans-serif, Mirosoft-Yahei;
-    font-size: 62.5%;
+    font-family: '微软雅黑','sans-serif', 'Mirosoft Yahei','-apple-system-font','Helvetica Neue','Helvetica';
+    font-size: 10px;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-ul,li {
+ul, li {
     list-style: none;
+}
+img {
+    border: 0;
+    padding: 0;
+    outline: none;
+}
+p {
+    margin: 0;
+}
+button,input {
+    outline: 0;
+}
+ul {
     padding: 0;
 }
 
@@ -88,3 +106,14 @@ ul,li {
     overflow: hidden;
     _height: 1%;
 }
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.hide {
+  display: none;
+}
+
+/* =============== fui ============== */

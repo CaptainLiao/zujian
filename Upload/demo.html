@@ -6,13 +6,16 @@
     <meta name="format-detection" content="telphone=no, email=no" />
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,  user-scalable=0" name="viewport" />
     <title>Upload</title>
+    <link rel="stylesheet" type="text/css" href="../reset.css">
     <link rel="stylesheet" href="./upload2.css">
 </head>
 <body>
 <div class="fui-upload">
     上传图片
 </div>
-<div class="fui-upload_mask"></div>
+
+
+<!-- <div class="fui-mask"></div>
 <div class="fui-upload_box">
     <div class="fui-upload_choose">
         <div class="fui-upload_input-box">
@@ -28,10 +31,12 @@
         </div>
     </div>
     <ul class="fui-upload_preview clearfix">
-       
 
     </ul>
-</div>
+</div> -->
+
+
+
 <!--<div class="fui-upload clearfix">
     <form action="" id="uploadForm" enctype="multipart/form-data" name="form">
         <ul class="fui-upload_files">
@@ -72,7 +77,7 @@
 
         /*======upload2.js========*/
 
-        $("#uploadInput").upload();
+        $(".fui-upload").upload();
 
 
 

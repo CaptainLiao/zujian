@@ -1,56 +1,10 @@
-html,body {
-    font-family: '微软雅黑','sans-serif', 'Mirosoft Yahei','-apple-system-font','Helvetica Neue','Helvetica';
-    font-size: 10px;
-}
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.clearfix:after {
-    content: '';
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;;
-}
-.clearfix2 {
-    overflow: hidden;
-    _zoom: 1;
-}
-.clearfix3 {
-    overflow: hidden;
-    _height: 1%;
-}
-.fl {
-    float: left;
-}
-.fr {
-    float: right;
-}
-ul, li {
-    list-style: none;
-}
-img {
-    border: 0;
-    padding: 0;
-    outline: none;
-}
-p {
-    margin: 0;
-}
-button,input {
-    outline: 0;
-}
-ul {
-    padding: 0;
-}
+
 
 .fui-upload {
     cursor: pointer;
 }
 
-.fui-upload_mask {
+.fui-mask {
     position: fixed;
     top: 0;
     left: 0;
@@ -61,7 +15,6 @@ ul {
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
     z-index: 99;
-
 }
 .fui-upload_box {
     position: absolute;

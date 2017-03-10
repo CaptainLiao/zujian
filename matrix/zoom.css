@@ -1,0 +1,64 @@
+.fui-mask {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  animation: jumpShow 300ms ease-in-out;
+}
+
+.fui-pop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 9999;
+  animation: jumpShow 300ms ease-in-out;
+}
+@keyframes jumpShow {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes jumpHide {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
+.fui-slider {
+  width: 10000%;
+  height: 100%;
+  position: absolute;
+}
+.fui-slider:after {
+  content: ' ';
+  display: inline-block;
+  height: 0;
+  clear: both;
+  overflow: hidden;
+}
+.fui-slider-item {
+  width: 100%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.fui-slider-item img {
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
