@@ -24,7 +24,6 @@ Matrix.prototype.chooseImg = function () {
             $imgs = $wrap.find('img'),
             url = '',
             li = '',
-            n = _this.imgLen,
             clientWidth = _this.clientW;
 
         index = $(this).index();
@@ -36,14 +35,11 @@ Matrix.prototype.chooseImg = function () {
             $imgs.each(function () {
                 url = $(this).attr('src');
                 li += ' <li class="fui-slider-item" style="width: '+clientWidth+'px"><img src='+url+' alt=""></li>';
-                n++;
+                _this.imgLen++;
             });
             $('.fui-slider').append(li)
-                .width(n * 100 +'%')
+                .width(_this.imgLen * 100 +'%')
                 .css('left', -index * clientWidth +'px');
-
-            _this.imgLen = n;
-
         }else {
             alert('请选择图片@@');
             return
@@ -55,8 +51,10 @@ Matrix.prototype.chooseImg = function () {
     })
 };
 Matrix.prototype.closeImg = function () {
+    var _this = this;
     $('.fui-slider-item').on('click', function (e) {
         $('.fui-pop, .fui-mask').remove();
+        _this.imgLen = 0;
     })
 };
 Matrix.prototype.touchSlide = function () {
@@ -95,22 +93,24 @@ Matrix.prototype.touchSlide = function () {
                 $slider.css('left', left+'px');
                 return;
             }
+
             index = index % imgLen;
+
             if(index ==0){
-                if(m>0) {
+                if(m > 0) {
                     $slider.css('left', left+'px');
                 }else {
                     $slider.css('left', left-clientW+'px');
                 }
             }else if(index < imgLen-1){
-                if(m>0) {
+                if(m > 0) {
                     $slider.css('left', left+clientW+'px');
                 }else {
                     $slider.css('left', left-clientW+'px');
                 }
 
             }else{
-                if(m<0) {
+                if(m < 0) {
                     $slider.css('left', left+'px');
                 }else {
                     $slider.css('left', left+clientW+'px');
