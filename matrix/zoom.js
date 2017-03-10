@@ -10,6 +10,8 @@ function Matrix($el, options) {
     this.params = $.extend({},{plus: 1.1, reduce: .9}, options);
     this.plus = this.params.plus;
     this.reduce = this.params.reduce;
+    // 缩放初始值
+    this.s = 1;
     this.flag = false;
 }
 
@@ -89,6 +91,9 @@ Matrix.prototype.touchSlide = function () {
 
         $(this).on('touchend', function (e) {
             _this.flag = false;
+            // 每次touchend的时候，将缩放值初始化
+            _this.s = 1;
+
             if(Math.abs(m) < clientW / 3){
                 $slider.css('left', left+'px');
                 return;
@@ -122,7 +127,6 @@ Matrix.prototype.touchSlide = function () {
 };
 
 Matrix.prototype.scale = function() {
-    var scale = 1;
     var _this = this;
 
     $('.fui-slider').on('mousewheel','.fui-slider-item', function(e) {
@@ -134,15 +138,17 @@ Matrix.prototype.scale = function() {
             delta = oEvent.wheelDelta || -oEvent.delta;
 
         if(delta > 0) {
-            scale *= _this.plus;
+            _this.s *= _this.plus;
         }else {
-            scale *= _this.reduce;
+            _this.s *= _this.reduce;
         }
+     
+
         p_x = (oEvent.clientX / $(window).width()) * 100;
         p_y = (oEvent.clientY / $(window).height()) *100 ;
 
         $(this).css({
-            'transform': 'scale('+scale+')',
+            'transform': 'scale('+_this.s+')',
             'transform-origin':p_x+'% '+p_y+'%',
             '-webkit-transform-origin': p_x+'% '+p_y+'%'
         });
