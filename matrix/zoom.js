@@ -15,6 +15,10 @@ function Matrix($el, options) {
     this.flag = false;
 }
 
+Matrix.prototype.init = function () {
+
+}
+
 Matrix.prototype.chooseImg = function () {
     var _this = this,
         $wrap  = this.$el;
@@ -77,9 +81,8 @@ Matrix.prototype.touchSlide = function () {
         $(this).on('touchmove', function (e) {
             _this.cur_x = e.originalEvent.touches[0].clientX;
             m = _this.cur_x - _this.start_x;
+
             if(Math.abs(m) > 50) {
-                console.log(m);
-                console.log(m);
                 $slider
                     .css('left', left+m+'px')
                     .find('.fui-slider-item').css({
