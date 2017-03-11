@@ -5,7 +5,7 @@ function Matrix($el, options) {
     this.imgLen = 0;
     this.cur_x = 0;
     this.start_x = 0;
-    // 差值
+    // 差值: cur_x - start_x
     this.m = 0;
 
     this.params = $.extend({},{plus: 1.1, reduce: .9}, options);
@@ -26,14 +26,14 @@ Matrix.prototype.chooseImg = function () {
 
     $wrap.on('click','img' ,function () {
         var mask = $('<div class="fui-mask"></div>'),
-        fui_pop = $('<div class="fui-pop"></div>'),
-        fui_slider = $('<ul class="fui-slider"></ul>'),
-        index,
-        $imgs = $wrap.find('img'),
-        url = '',
-        li = '',
-        clientWidth = _this.clientW,
-        clientH = _this.clientH;
+            fui_pop = $('<div class="fui-pop"></div>'),
+            fui_slider = $('<ul class="fui-slider"></ul>'),
+            index,
+            $imgs = $wrap.find('img'),
+            url = '',
+            li = '',
+            clientWidth = _this.clientW,
+            clientH = _this.clientH;
 
         index = $(this).index();
 
@@ -98,9 +98,7 @@ Matrix.prototype.touchSlide = function () {
                     m *= .4;
                 }
 
-                $slider
-                .css('left', left+m+'px')
-
+                $slider.css('left', left+m+'px');
             }
         });
 
@@ -155,13 +153,14 @@ Matrix.prototype.scale = function() {
             p_x = 0,
             p_y = 0,
             delta = oEvent.wheelDelta || -oEvent.delta;
-
+            
         if(delta > 0) {
             _this.s *= _this.plus;
         }else {
             _this.s *= _this.reduce;
         }
 
+        // 缩放最大、最小值
         if(_this.s > 2) _this.s = 2;
         if(_this.s < .5) _this.s = .5;
 
