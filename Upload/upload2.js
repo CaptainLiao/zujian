@@ -1,8 +1,9 @@
 !function(window, $, undefined) {
     /**
-     * @param   {String}    el      必填挂载元素
-     * @param   {Object}    opts    可选参数
-     * @param   {Function}  callback    上传成功的回调（ajax）
+     * @param   {String}    el       必填  挂载元素
+     * @param   {String}    url      必填  上传服务器地址
+     * @param   {Object}    opts     可选  参数
+     * @param   {Function}  callback 可选  上传成功的回调（ajax）
      *
      * opts: {
      *      debug: false,   默认关闭
@@ -12,11 +13,14 @@
      *      quality: .8,    输出图片的质量[0-1]
      * }
      */
-     function Uploader($el, opts, callback) {
+     function Uploader($el, url, opts, callback) {
         this.$el = $el;
-        //this.submitBtn = $(el);
+        this.url = url;
+         this.images = [];
+        // 图片个数
         this.n = 0;
-        this.images = [];
+        // 文件大小总数
+        this.fileSize = 0;
         this.defaults = {
             debug: false,
             maxLen: 6,
@@ -43,7 +47,7 @@
                                 '</div>'+
                             '</div>'+
                             '<div class="fui-upload_status-bar clearfix">'+
-                                '<div class="fui-upload_info fl">0个文件，共0M</div>'+
+                                '<div class="fui-upload_info fl">选中 0 个文件，共 0 M</div>'+
                                 '<div class="fui-upload_btn fr">'+
                                     '<button class="fui-upload_add" type="button">继续添加</button>'+
                                     '<button class="fui-upload_submit" type="button">点击上传</button>'+
@@ -57,8 +61,9 @@
 
             _this.change();
 
+            //submit
             $('.fui-upload_submit').click(function() {
-                _this.submit('www.baidu.com', {});
+                _this.submit(_this.url, {});
             })         
         })
     };
@@ -87,7 +92,9 @@
                 var url = window.URL.createObjectURL(file);
                 var type = file.type;
                 var maxSize = _this.options.maxSize;
-
+                console.log(file.size)
+                console.log(file)
+                _this.fileSize +=file.size;
                 if(file.size > maxSize*1024*1024){
                     _this._tips('单张图片不能超过'+maxSize+'M');
                     return;
@@ -107,6 +114,9 @@
 
             // 删除图片
             _this.del();
+            console.log(_this.n)
+            console.log(_this.fileSize)
+            $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
         });
 
         return this;
@@ -129,28 +139,6 @@
                     --_this.n;
                 }
             });
-        })
-    };
-    // 改变预览图片宽高比
-    Uploader.prototype.changeImg = function () {
-        var $img = $('.fui-upload_preview_item').find('img'),
-        i_w = '',
-        i_h = '';
-        $.each($img, function () {
-            var $this = $(this);
-            i_w = $this.width();
-            i_h = $this.height();
-            console.log(i_w)
-            console.log(i_h)
-
-            if(i_w > i_h) {
-                $this.width(100-12+'%')
-                $this.height('auto')
-            }else {
-                $this.width('auto')
-                $this.height(100-12+'%')
-
-            }
         })
     };
     Uploader.prototype.compress = function (file, img_type) {
@@ -227,7 +215,7 @@
             return;
         }
         if(!apiURL) {
-            _this._tips('上传url为空！');
+            _this._tips('上传url参数不能为空！');
             return;
         }
 
@@ -258,6 +246,7 @@
             _this.timer = setTimeout(function () {
                 $('.fui-upload-progressbar').fadeOut();
             }, 500)
+            _this._tips('upload completed')
         }
         function transferFailed(evt) {
             alert("An error occurred while transferring the file.");
@@ -284,9 +273,9 @@
     };
 
     var uploader = '';
-    $.fn.upload = function (opts, callback) {
+    $.fn.upload = function (url, opts, callback) {
         console.log(this);
-        uploader = new Uploader(this, opts, callback);
+        uploader = new Uploader(this, url, opts, callback);
         return uploader.showUpload();
 
     };
