@@ -95,7 +95,9 @@ Matrix.prototype.touchSlide = function () {
             // 滑动距离大于30px 才开始移动
             if(Math.abs(m) > 30) {
                 if(index == 0 && m > 0 || index == imgLen - 1 && m < 0) {
-                    m *= .4;
+                    if(_this.s == 1) {
+                        m *= .4;
+                    }
                 }
 
                 $slider.css('left', left+m+'px');
@@ -105,13 +107,13 @@ Matrix.prototype.touchSlide = function () {
         $(this).on('touchend', function (e) {
             _this.flag = false;
 
-            // 每次touchend的时候，将缩放值初始化
-            _this.s = 1;
-
             if(Math.abs(m) < clientW / 3){
                 $slider.css('left', left +'px');
                 return;
             }
+
+             // 每次touchend的时候，将缩放值初始化
+            _this.s = 1;
 
             if(index ==0){
                 if(m > 0) {
