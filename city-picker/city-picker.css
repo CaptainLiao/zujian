@@ -1,0 +1,58 @@
+.fui-city-picker {
+  position: absolute;
+  top: 19px;
+  left: -1px;
+  width: 300px;
+  border-top: 0;
+  z-index: 9999;
+}
+.fui-city-picker_tab {
+  width: 300px;
+  text-align: center;
+  border-left: 1px solid #D9D9D9;
+  cursor: pointer;
+  background: #EAEAEA;
+}
+.fui-city-picker_content{
+  width: 300px;
+  min-height: 80px;
+  border: 1px solid #D9D9D9;
+  border-top: 0;
+  padding: 6px 12px;
+}
+
+.fui-city-picker_tab-a {
+  display: block;
+  float: left;
+  width: 33.3333%;
+  height: 40px;
+  line-height: 40px;
+  border-right: 1px solid #D9D9D9;
+  border-bottom: 1px solid #D9D9D9;
+}
+.fui-city-picker_select dl {
+  line-height: 2;
+}
+.fui-city-picker_select dd,
+.fui-city-picker_select-city dd{
+  width: 90%;
+  padding-left: 4%;
+   cursor: pointer;
+}
+
+.fui-city-picker_select dd a ,
+.fui-city-picker_select-city dd a {
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.fui-active {
+    color: #E64340;
+    background: #fff;
+    border-bottom: 1px solid #fff;
+}
+.fui-city-selected {
+  color: #fff;
+  background: #E64340;
+  border-radius: 4px;
+}
