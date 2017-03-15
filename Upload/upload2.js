@@ -13,10 +13,10 @@
      *      quality: .8,    输出图片的质量[0-1]
      * }
      */
-     function Uploader($el, url, opts, callback) {
+    function Uploader($el, url, opts, callback) {
         this.$el = $el;
         this.url = url;
-         this.images = [];
+        this.images = [];
         // 图片个数
         this.n = 0;
         // 文件大小总数
@@ -40,84 +40,108 @@
         this.$el.on('click', function() {
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
-                            '<div class="fui-upload_choose">'+
-                                '<div class="fui-upload_input-box">'+
-                                    '<div>点击选择文件</div>'+
-                                    '<input id="uploadInput" class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">'+
-                                '</div>'+
-                            '</div>'+
-                            '<div class="fui-upload_status-bar clearfix">'+
-                                '<div class="fui-upload_info fl">选中 0 个文件，共 0 M</div>'+
-                                '<div class="fui-upload_btn fr">'+
-                                    '<button class="fui-upload_add" type="button">继续添加</button>'+
-                                    '<button class="fui-upload_submit" type="button">点击上传</button>'+
-                                '</div>'+
-                            '</div>'+
-                            '<ul class="fui-upload_preview clearfix">'+
+                '<div class="fui-upload_choose">'+
+                '<div class="fui-upload_input-box">'+
+                '<div>点击选择文件</div>'+
+                '<input id="uploadInput" class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">'+
+                '</div>'+
+                '</div>'+
+                '<div class="fui-upload_status-bar clearfix">'+
+                '<div class="fui-upload_info fl">选中 0 个文件，共 0 M</div>'+
+                '<div class="fui-upload_btn fr">'+
+                '<button class="fui-upload_add" type="button">继续添加</button>'+
+                '<button class="fui-upload_submit" type="button">点击上传</button>'+
+                '</div>'+
+                '</div>'+
+                '<ul class="fui-upload_preview clearfix">'+
 
-                            '</ul>'+
-                        '</div>';
-            $('body').append(mask).append(upload); 
+                '</ul>'+
+                '</div>';
+            $('body').append(mask).append(upload);
 
             _this.change();
 
             //submit
             $('.fui-upload_submit').click(function() {
                 _this.submit(_this.url, {});
-            })         
+            })
         })
     };
     /**
      * <input> 的change事件
      */
-     Uploader.prototype.change = function (ev) {
+    Uploader.prototype.change = function (ev) {
         var _this = this,
-        uploadInput = document.getElementById('uploadInput');
-        uploadInput.addEventListener('change', function (ev) {
-            // 使用jquery 取不到files
-            var files = this.files,
-            len = files.length,
-            maxLen = _this.options.maxLen;
-            console.log(len);
-            if(len == 0) return;
-            if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > 6) {
-                _this._tips('不能超过'+maxLen+'个图片');
-                return;
-            }
-            // 遍历files，显示缩略图
-            var li = '';
-            Array.prototype.forEach.call(files, function (file) {
+            uploadInput = document.getElementById('uploadInput');
+        console.log(1);
+        var
+            isIE = /ie/i.test(navigator.userAgent.toLowerCase()),
+            isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase());
 
-                // 得到图片地址（blob对象）
-                var url = window.URL.createObjectURL(file);
-                var type = file.type;
-                var maxSize = _this.options.maxSize;
-                console.log(file.size)
-                console.log(file)
-                _this.fileSize +=file.size;
-                if(file.size > maxSize*1024*1024){
-                    _this._tips('单张图片不能超过'+maxSize+'M');
+        if(isIE) {
+
+            uploadInput.select();
+            console.log(uploadInput.select());
+            var reallocalpath = document.selection.createRange().text;
+            console.log(reallocalpath)
+
+        }else {
+            uploadInput.addEventListener('change', function (ev) {
+                ev.preventDefault();
+
+                // 使用jquery 取不到files
+                var files = this.files,
+                    len = files.length,
+                    maxLen = _this.options.maxLen;
+
+                if(len == 0) return;
+                if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > 6) {
+                    _this._tips('不能超过'+maxLen+'个图片');
                     return;
                 }
-                ++_this.n;
-                if(_this.n > maxLen) {
-                    _this.n = maxLen;
-                    return;
-                }
-                li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""></li>';
+                // 遍历files，显示缩略图
+                var li = '';
+                Array.prototype.forEach.call(files, function (file) {
+                    // 判断是否为IE浏览器
 
-                _this.compress(file, type);
+                    // 得到图片地址（blob对象）（IE 10+）
+                    var
+                        isIE = /ie/i.test(navigator.userAgent.toLowerCase()),
+                        isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase()),
+                        url = window.URL.createObjectURL(file),
+                        type = file.type,
+                        maxSize = _this.options.maxSize;
+
+                    _this.fileSize +=file.size;
+                    if(file.size > maxSize*1024*1024){
+                        _this._tips('单张图片不能超过'+maxSize+'M');
+                        return;
+                    }
+                    ++_this.n;
+                    if(_this.n > maxLen) {
+                        _this.n = maxLen;
+                        _this._tips('图片总数不能超过'+maxLen +'张');
+                        return;
+                    }
+
+                    li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""></li>';
+
+                    _this.compress(file, type);
+
+                });
+
+
+                // 显示缩略图
+                $('.fui-upload_preview').append(li);
+
+                // 删除图片
+                _this.del();
+
+                $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
             });
+        }
 
-            // 显示缩略图
-            $('.fui-upload_preview').append(li);
 
-            // 删除图片
-            _this.del();
-            console.log(_this.n)
-            console.log(_this.fileSize)
-            $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
-        });
 
         return this;
     };
@@ -145,12 +169,12 @@
         var _this = this;
         createImageBitmap(file).then(function (imageBitmap) {
             var mimeType = "image/jpeg",
-            max_w = _this.options.maxWidth,
-            quality = _this.options.quality,
-            c_w = '',
-            c_h = '',
-            i_w = imageBitmap.width,
-            i_h = imageBitmap.height;
+                max_w = _this.options.maxWidth,
+                quality = _this.options.quality,
+                c_w = '',
+                c_h = '',
+                i_w = imageBitmap.width,
+                i_h = imageBitmap.height;
             if(img_type!=undefined && img_type=="image/png"){
                 mimeType = "image/png";
             }
@@ -183,15 +207,15 @@
      *@param    {String}    url     上传服务器地址
      *@param    {Object}    param    上传参数
      */
-     Uploader.prototype.submit = function (url, param) {
+    Uploader.prototype.submit = function (url, param) {
         var _this = this,
-        fd = new FormData(document.getElementById('uploadForm')),
-        images = this.images,
-        submitBtn = this.submitBtn,
-        params = param,
-        apiURL = url,
-        debug = this.options.debug,
-        callback = this.callback;
+            fd = new FormData(document.getElementById('uploadForm')),
+            images = this.images,
+            submitBtn = this.submitBtn,
+            params = param,
+            apiURL = url,
+            debug = this.options.debug,
+            callback = this.callback;
         console.log(param);
         console.log(images);
         if(images.length>0) {
@@ -275,6 +299,7 @@
     var uploader = '';
     $.fn.upload = function (url, opts, callback) {
         console.log(this);
+        console.log(/msie 8.0/.test(navigator.userAgent.toLowerCase()))
         uploader = new Uploader(this, url, opts, callback);
         return uploader.showUpload();
 

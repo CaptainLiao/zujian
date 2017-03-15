@@ -56,6 +56,11 @@ img {
     padding: 4px 0 4px 4px;
     border: 1px solid #E9E9E9;
     border-radius: 8px;
+    -webkit-transition: all 2s ease-in;
+    -moz-transition: all 2s ease-in;
+    -ms-transition: all 2s ease-in;
+    -o-transition: all 2s ease-in;
+    transition: all 2s ease-in;
 }
 
 .fui-upload_file img {

@@ -13,17 +13,18 @@
      * }
      */
     function Uploader(el, opts, callback) {
-        this.submitBtn = $(el);
-        this.n = 0;
-        this.images = [];
-        this.defaults = {
+        var defaults = {
             debug: false,
             maxLen: 6,
             maxSize: 6,
             maxWidth: 1000,
             quality: .8
         };
-        this.options = $.extend({}, this.defaults, opts);
+        this.submitBtn = $(el);
+        this.n = 0;
+        this.images = [];
+
+        this.options = $.extend({}, defaults, opts);
         // 成功后的回调
         this.callback = callback;
     }
@@ -93,7 +94,7 @@
             // 首先移除当前li标签（表面删除）
             var $this = $(this);
             _this.timer = null;
-            $this.parent().fadeOut(300);
+            $this.parent().css('transform','scale(0)');
             _this.timer = setTimeout(function () {
                 $this.parent().remove()
             },300);
@@ -230,6 +231,7 @@
         //         submitBtn.prop('disabled', true)
         //     },
         //     complete: function (res) {
+
         //         submitBtn.prop('disabled', false);
         //         if(debug) console.log(res.responseJSON);
         //         callback && callback instanceof Function && callback(res);
