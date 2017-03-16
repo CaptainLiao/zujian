@@ -40,10 +40,12 @@
         this.$el.on('click', function() {
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
-                '<div class="fui-upload_choose">'+
-                '<div class="fui-upload_input-box">'+
+                '<div class="fui-upload_choose clearfix">'+
+                '<div class="fui-upload_input-box fl">'+
                 '<div>点击选择文件</div>'+
-                '<input id="uploadInput" class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">'+
+                '<input id="uploadInput" onblur class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">'+
+                '</div>'+
+                '<div class="fui-upload_drag fl" id="fui-upload_drag">'+
                 '</div>'+
                 '</div>'+
                 '<div class="fui-upload_status-bar clearfix">'+
@@ -61,11 +63,34 @@
 
             _this.change();
 
+            _this.dragImg();
+
             //submit
             $('.fui-upload_submit').click(function() {
                 _this.submit(_this.url, {});
             })
         })
+    };
+
+    Uploader.prototype.dragImg = function () {
+        console.log('a')
+        //拖离
+        document.addEventListener('dragleave',function(e){e.preventDefault();});
+        //拖后放
+        document.addEventListener('drop',function(e){e.preventDefault();});
+        //拖进
+        document.addEventListener('dragenter',function(e){e.preventDefault();});
+        //拖来拖去
+        document.addEventListener('dragover',function(e){e.preventDefault();});
+
+        var dragBox = document.getElementById('fui-upload_drag');
+
+        dragBox.addEventListener('drag', function (e) {
+            console.log(e);
+            e.preventDefault();
+            console.log(e);
+            var fileList = e.dataTransfer.files;
+        });
     };
     /**
      * <input> 的change事件
@@ -79,9 +104,9 @@
             isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase());
 
         if(isIE) {
-
+            console.log(2);
             uploadInput.select();
-            console.log(uploadInput.select());
+            //console.log(uploadInput.select());
             var reallocalpath = document.selection.createRange().text;
             console.log(reallocalpath)
 
