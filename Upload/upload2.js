@@ -1,6 +1,6 @@
 !function(window, $, undefined) {
     /**
-     * @param   {String}    el       必填  挂载元素
+     * @param   {String}    $el       必填  挂载元素
      * @param   {String}    url      必填  上传服务器地址
      * @param   {Object}    opts     可选  参数
      * @param   {Function}  callback 可选  上传成功的回调（ajax）
@@ -16,10 +16,10 @@
     function Uploader($el, url, opts, callback) {
         var defaults = {
             debug: false,
-            maxLen: 6,
+            maxLen: 10,
             maxSize: 6,
-            maxWidth: 1000,
-            quality: .8
+            maxWidth: 5000,
+            quality: 1
         };
         this.$el = $el;
         this.url = url;
@@ -41,6 +41,11 @@
         var _this =this;
         console.log($('.fui-mask').length>0)
         this.$el.on('click', function() {
+            if(document.body.addEventListener == undefined) {
+                alert('傻逼还在用IE');
+                return false;
+            }
+
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
                 '<a class="fui-close iconfont">&#xe6ac;</a>'+
@@ -58,7 +63,7 @@
                 '<a class="fui-upload_submit" type="button">点击上传</a>'+
                 '</div>'+
                 '</div>'+
-                '<ul class="fui-upload_preview clearfix">'+
+                '<ul class="fui-upload_preview clearfix" id="fui-upload_preview">'+
 
                 '</ul>'+
                 '</div>';
@@ -67,7 +72,12 @@
 
             _this.change();
 
-            _this.dragImg();
+            if(document.body.addEventListener != undefined) {
+                _this.dragImg();
+            }else {
+                alert('傻逼还在用IE')
+            }
+
 
             //submit
             $('.fui-upload_submit').click(function() {
@@ -113,18 +123,24 @@
      */
     Uploader.prototype.change = function (ev) {
         var _this = this,
-            uploadInput = document.getElementById('uploadInput');
-        console.log(1);
-        var
+            uploadInput = document.getElementById('uploadInput'),
             isIE = /ie/i.test(navigator.userAgent.toLowerCase()),
-            isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase());
-
+            isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase()),
+            li = '';
         if(isIE) {
-            console.log(2);
-            uploadInput.select();
-            //console.log(uploadInput.select());
-            var reallocalpath = document.selection.createRange().text;
-            console.log(reallocalpath)
+            //li += '<li class="fui-upload_preview_item" style="width: 80%;height: 240px;overflow: hidden"><img id="fui-upload_preview_item" style="width:100%"></li>';
+            //document.getElementById('fui-upload_preview').innerHTML = li;
+            console.log(uploadInput)
+            var pic = document.getElementById('fui-upload_preview_item');
+            uploadInput.onchange = function (ev) {
+                uploadInput.select();
+                console.log(1)
+                var reallocalpath = document.selection.createRange().text;
+                console.log(reallocalpath);
+                pic.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='image',src=\"" + reallocalpath + "\")";
+                // 设置img的src为base64编码的透明图片 取消显示浏览器默认图片
+                pic.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+            };
 
         }else {
             uploadInput.addEventListener('change', function (ev) {
@@ -145,8 +161,9 @@
             len = files.length,
             maxLen = _this.options.maxLen;
 
+        console.log(len)
         if(len == 0) return;
-        if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > 6) {
+        if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > maxLen) {
             _this._tips('不能超过'+maxLen+'个图片');
             return;
         }
@@ -171,7 +188,7 @@
                 return;
             }
 
-            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""> <a class="fui-icon-del iconfont">&#xe63d;</a></li>';
+            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt='+file.name+'> <a class="fui-icon-del iconfont">&#xe63d;</a></li>';
 
             _this.compress(file, type);
 
@@ -216,6 +233,7 @@
                     --_this.n;
                 }
             });
+            console.log(_this.images);
         })
     };
     Uploader.prototype.compress = function (file, img_type) {
@@ -287,9 +305,6 @@
                     }
                 }
             }
-        }else {
-            _this._tips('上传参数为空！');
-            return;
         }
         if(!apiURL) {
             _this._tips('上传url参数不能为空！');
@@ -360,7 +375,6 @@
     var uploader = '';
     $.fn.upload = function (url, opts, callback) {
         console.log(this);
-        console.log(/msie 8.0/.test(navigator.userAgent.toLowerCase()))
         uploader = new Uploader(this, url, opts, callback);
         return uploader.showUpload();
 
