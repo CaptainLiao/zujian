@@ -14,6 +14,13 @@
      * }
      */
     function Uploader($el, url, opts, callback) {
+        var defaults = {
+            debug: false,
+            maxLen: 6,
+            maxSize: 6,
+            maxWidth: 1000,
+            quality: .8
+        };
         this.$el = $el;
         this.url = url;
         this.images = [];
@@ -21,38 +28,34 @@
         this.n = 0;
         // 文件大小总数
         this.fileSize = 0;
-        this.defaults = {
-            debug: false,
-            maxLen: 6,
-            maxSize: 6,
-            maxWidth: 1000,
-            quality: .8
-        };
-        this.options = $.extend({}, this.defaults, opts);
+
+        this.options = $.extend({}, defaults, opts);
         // 成功后的回调
         this.callback = callback;
     }
     Uploader.prototype._tips = function (msg) {
         alert(msg)
     };
+
     Uploader.prototype.showUpload = function () {
         var _this =this;
+        console.log($('.fui-mask').length>0)
         this.$el.on('click', function() {
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
+                '<a class="fui-close iconfont">&#xe6ac;</a>'+
                 '<div class="fui-upload_choose clearfix">'+
                 '<div class="fui-upload_input-box fl">'+
                 '<div>点击选择文件</div>'+
-                '<input id="uploadInput" onblur class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">'+
+                '<input id="uploadInput" tabindex="-1" class="fui-upload_input" type="file" multiple accept="image/jpeg,image/jpg,image/png">'+
                 '</div>'+
-                '<div class="fui-upload_drag fl" id="fui-upload_drag">'+
-                '</div>'+
+                '<div class="fui-upload_drag fl" id="fui-upload_drag"><span class="clearfix2"></span></div>'+
                 '</div>'+
                 '<div class="fui-upload_status-bar clearfix">'+
                 '<div class="fui-upload_info fl">选中 0 个文件，共 0 M</div>'+
                 '<div class="fui-upload_btn fr">'+
-                '<button class="fui-upload_add" type="button">继续添加</button>'+
-                '<button class="fui-upload_submit" type="button">点击上传</button>'+
+                '<a class="fui-upload_add" type="button">继续添加</a>'+
+                '<a class="fui-upload_submit" type="button">点击上传</a>'+
                 '</div>'+
                 '</div>'+
                 '<ul class="fui-upload_preview clearfix">'+
@@ -61,6 +64,7 @@
                 '</div>';
             $('body').append(mask).append(upload);
 
+
             _this.change();
 
             _this.dragImg();
@@ -68,7 +72,14 @@
             //submit
             $('.fui-upload_submit').click(function() {
                 _this.submit(_this.url, {});
-            })
+            });
+
+            // 继续添加
+            $('.fui-upload_add').click(function () {
+                $('#uploadInput').trigger('click');
+            });
+
+            _this.closeUpload();
         })
     };
 
@@ -160,7 +171,7 @@
                 return;
             }
 
-            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""></li>';
+            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""> <a class="fui-icon-del iconfont">&#xe63d;</a></li>';
 
             _this.compress(file, type);
 
@@ -177,7 +188,19 @@
 
     Uploader.prototype.del = function () {
         var _this = this;
-        $('.fui-upload_files').on('click', '.fui-icon-close',function () {
+        $('.fui-upload_preview_item').hover(
+            function () {
+                var del = $(this).find('.fui-icon-del');
+                del.stop().fadeIn();
+
+            },
+            function () {
+                var del = $(this).find('.fui-icon-del');
+                del.stop().fadeOut();
+
+            });
+
+        $('.fui-upload_box').on('click', '.fui-icon-del',function () {
             // 首先移除当前li标签（表面删除）
             var $this = $(this);
             _this.timer = null;
@@ -324,6 +347,14 @@
         //         callback && callback instanceof Function && callback(res);
         //     }
         // })
+    };
+
+    Uploader.prototype.closeUpload = function () {
+        $('.fui-mask').click(function () {
+            $(this).remove();
+            $('.fui-upload_box').remove();
+        });
+
     };
 
     var uploader = '';

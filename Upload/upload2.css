@@ -1,4 +1,18 @@
+@font-face {
+    font-family: 'iconfont';  /* project id 237960 */
+    src: url('//at.alicdn.com/t/font_pvjgp1phr33rqkt9.eot');
+    src: url('//at.alicdn.com/t/font_pvjgp1phr33rqkt9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_pvjgp1phr33rqkt9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_pvjgp1phr33rqkt9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_pvjgp1phr33rqkt9.svg#iconfont') format('svg');
+}
 
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;}
 
 .fui-upload {
     cursor: pointer;
@@ -29,6 +43,38 @@
     border-radius: 6px;
     box-shadow: 1px 1px 8px 2px #333333 ;
 }
+.fui-close {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    font-size: 16px;
+    color: #000;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.fui-icon-del {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px;
+    line-height: 12px;
+    text-align: center;
+    font-size: 16px;
+    color: #E64340;
+    cursor: pointer;
+    display: none;
+}
+
+.fui-close:hover {
+    background-color: #E64340;
+    color: #fff;
+}
+
+
 .fui-upload_choose {
     width: 100%;
     height: 100%;
@@ -39,16 +85,32 @@
     height: 120px;
     margin-left: 40px;
     border: 1px dotted #999999;
+    position: relative;
 }
-.fui-upload_drag:after {
+.fui-upload_drag span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding-left: 110px;
+    text-align: center;
+}
+.fui-upload_drag span:after {
     content: 'Drag Image';
     display: inline-block;
+    float: left;
     color: #D9D9D9;
     font-size: 18px;
-    width: 100%;
     text-align: center;
     line-height: 120px;
-
+}
+.fui-upload_drag span:before {
+    content: '\e614';
+    display: inline-block;
+    float: left;
+    font-family: iconfont;
+    font-size: 40px;
+    line-height: 120px;
+    color: #D9D9D9;
 }
 .fui-upload_input-box {
     position: relative;
@@ -72,6 +134,7 @@
     border-radius: 4px;
     outline: 0;
     font-size: 16px;
+    cursor: pointer;
 }
 .fui-upload_input-box>input {
     opacity: 0;
@@ -95,8 +158,11 @@
 }
 .fui-upload_add,
 .fui-upload_submit {
+    display: inline-block;
     width: 80px;
     height: 32px;
+    text-align: center;
+    line-height: 32px;
     margin-top: 6px;
     background-color: #fff;
     border: 1px solid #D9D9D9;
@@ -104,7 +170,8 @@
     -moz-border-radius: 4px;
     border-radius: 4px;
     margin-right: 12px;
-    font-family: '微软雅黑', 'sans-serif', '-apple-system-font', 'Helvetica Neue', 'Helvetica';
+    cursor: pointer;
+    font-size: 14px;
 }
 .fui-upload_submit {
     color: #fff;
