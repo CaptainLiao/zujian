@@ -73,7 +73,21 @@
     };
 
     Uploader.prototype.dragImg = function () {
-        console.log('a')
+        var _this = this,
+            dragBox = document.getElementById('fui-upload_drag');
+
+        // 代码段一：很关键！如果没有这段代码且没有代码段二，drop事件的 e.preventDefault() 就失效了。
+        // dragBox.addEventListener('dragover', function (e) {
+        //     e.preventDefault();
+        // }, false);
+
+        dragBox.addEventListener('drop', function (e) {
+            e.preventDefault();
+            var file = e.dataTransfer.files[0];
+            _this.previewImg(e.dataTransfer);
+        }, false);
+
+        // 代码段二：很关键！防止用户瞎比拖（通过浏览器预览图片）。
         //拖离
         document.addEventListener('dragleave',function(e){e.preventDefault();});
         //拖后放
@@ -82,15 +96,6 @@
         document.addEventListener('dragenter',function(e){e.preventDefault();});
         //拖来拖去
         document.addEventListener('dragover',function(e){e.preventDefault();});
-
-        var dragBox = document.getElementById('fui-upload_drag');
-
-        dragBox.addEventListener('drag', function (e) {
-            console.log(e);
-            e.preventDefault();
-            console.log(e);
-            var fileList = e.dataTransfer.files;
-        });
     };
     /**
      * <input> 的change事件
@@ -113,63 +118,63 @@
         }else {
             uploadInput.addEventListener('change', function (ev) {
                 ev.preventDefault();
-
-                // 使用jquery 取不到files
-                var files = this.files,
-                    len = files.length,
-                    maxLen = _this.options.maxLen;
-
-                if(len == 0) return;
-                if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > 6) {
-                    _this._tips('不能超过'+maxLen+'个图片');
-                    return;
-                }
-                // 遍历files，显示缩略图
-                var li = '';
-                Array.prototype.forEach.call(files, function (file) {
-                    // 判断是否为IE浏览器
-
-                    // 得到图片地址（blob对象）（IE 10+）
-                    var
-                        isIE = /ie/i.test(navigator.userAgent.toLowerCase()),
-                        isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase()),
-                        url = window.URL.createObjectURL(file),
-                        type = file.type,
-                        maxSize = _this.options.maxSize;
-
-                    _this.fileSize +=file.size;
-                    if(file.size > maxSize*1024*1024){
-                        _this._tips('单张图片不能超过'+maxSize+'M');
-                        return;
-                    }
-                    ++_this.n;
-                    if(_this.n > maxLen) {
-                        _this.n = maxLen;
-                        _this._tips('图片总数不能超过'+maxLen +'张');
-                        return;
-                    }
-
-                    li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""></li>';
-
-                    _this.compress(file, type);
-
-                });
-
-
-                // 显示缩略图
-                $('.fui-upload_preview').append(li);
-
-                // 删除图片
-                _this.del();
-
-                $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
+                _this.previewImg(this);
             });
         }
-
-
-
         return this;
     };
+    /**
+     * 暂不支持 IE10 以下浏览器预览
+     * @param   {Object}    inputObj    选择或拖放图片的容器（需用原生JS获取）
+     */
+    Uploader.prototype.previewImg = function (inputObj) {
+        // 使用jquery 取不到files
+        var _this = this,
+            files = inputObj.files,
+            len = files.length,
+            maxLen = _this.options.maxLen;
+
+        if(len == 0) return;
+        if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > 6) {
+            _this._tips('不能超过'+maxLen+'个图片');
+            return;
+        }
+        var li = '';
+        Array.prototype.forEach.call(files, function (file) {
+
+            // 得到图片地址（blob对象）（IE 10+）
+            var
+                url = window.URL.createObjectURL(file),
+                type = file.type,
+                maxSize = _this.options.maxSize;
+
+            _this.fileSize +=file.size;
+            if(file.size > maxSize*1024*1024){
+                _this._tips('单张图片不能超过'+maxSize+'M');
+                return;
+            }
+            ++_this.n;
+            if(_this.n > maxLen) {
+                _this.n = maxLen;
+                _this._tips('图片总数不能超过'+maxLen +'张');
+                return;
+            }
+
+            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt=""></li>';
+
+            _this.compress(file, type);
+
+        });
+
+        // 显示缩略图
+        $('.fui-upload_preview').append(li);
+
+        // 删除图片
+        _this.del();
+
+        $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
+    };
+
     Uploader.prototype.del = function () {
         var _this = this;
         $('.fui-upload_files').on('click', '.fui-icon-close',function () {
