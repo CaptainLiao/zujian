@@ -186,57 +186,28 @@
             return;
         }
 
-        $('.fui-upload-progressbar').show();
-        var xhr = new XMLHttpRequest();
+        $.ajax({
+            url: apiURL,
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            beforeSend: function (xhr) {
 
-        xhr.upload.addEventListener("progress", updateProgress);
-        xhr.upload.addEventListener("load", transferComplete);
-        xhr.upload.addEventListener("error", transferFailed);
-        xhr.upload.addEventListener("abort", transferCanceled);
-
-        xhr.open('POST', apiURL, true);
-        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-        xhr.send(fd);
-
-        function updateProgress(evt) {
-            console.log(evt)
-            if (evt.lengthComputable) {
-                console.log(evt.loaded);
-                var percentComplete = evt.loaded / evt.total;
-                $('.fui-progress-line1').width(percentComplete*100+'%');
-            } else {
-                alert('你的浏览器版本太低，不支持进度条！');
+            },
+            success: function (json) {
+                if(debug) console.log(json);
+                callback && callback instanceof Function && callback(res);
+            },
+            error: function (e) {
+                _this._tips('出错'+ e.statusText);
+                console.log(e)
+            },
+            complete: function (e) {
+                console.log(e)
+                console.log(callback instanceof Function)
             }
-        }
-        function transferComplete(evt) {
-            _this.timer = null;
-            _this.timer = setTimeout(function () {
-                $('.fui-upload-progressbar').fadeOut();
-            }, 500)
-        }
-        function transferFailed(evt) {
-            alert("An error occurred while transferring the file.");
-        }
-        function transferCanceled(evt) {
-            alert("The transfer has been canceled by the user.");
-        }
-        // $.ajax({
-        //     url: apiURL,
-        //     type: 'POST',
-        //     data: fd,
-        //     processData: false,
-        //     contentType: false,
-        //     beforeSend: function (xhr) {
-        //         //$('[type="submit"]').prop('disabled', true)
-        //         submitBtn.prop('disabled', true)
-        //     },
-        //     complete: function (res) {
-
-        //         submitBtn.prop('disabled', false);
-        //         if(debug) console.log(res.responseJSON);
-        //         callback && callback instanceof Function && callback(res);
-        //     }
-        // })
+        })
     };
 
     var uploader = '';

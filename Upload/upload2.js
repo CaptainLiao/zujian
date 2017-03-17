@@ -32,6 +32,7 @@
         this.options = $.extend({}, defaults, opts);
         // 成功后的回调
         this.callback = callback;
+        console.log(this.callback)
     }
     Uploader.prototype._tips = function (msg) {
         alert(msg)
@@ -41,10 +42,7 @@
         var _this =this;
         console.log($('.fui-mask').length>0)
         this.$el.on('click', function() {
-            if(document.body.addEventListener == undefined) {
-                alert('傻逼还在用IE');
-                return false;
-            }
+
 
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
@@ -72,15 +70,11 @@
 
             _this.change();
 
-            if(document.body.addEventListener != undefined) {
-                _this.dragImg();
-            }else {
-                alert('傻逼还在用IE')
-            }
+            _this.dragImg();
 
 
             //submit
-            $('.fui-upload_submit').click(function() {
+            $('.fui-upload_submit').on('click',function() {
                 _this.submit(_this.url, {});
             });
 
@@ -161,7 +155,6 @@
             len = files.length,
             maxLen = _this.options.maxLen;
 
-        console.log(len)
         if(len == 0) return;
         if(len > maxLen || $('.fui-upload_file').length > maxLen-1 || _this.images.length > maxLen) {
             _this._tips('不能超过'+maxLen+'个图片');
@@ -233,7 +226,6 @@
                     --_this.n;
                 }
             });
-            console.log(_this.images);
         })
     };
     Uploader.prototype.compress = function (file, img_type) {
@@ -287,8 +279,7 @@
             apiURL = url,
             debug = this.options.debug,
             callback = this.callback;
-        console.log(param);
-        console.log(images);
+
         if(images.length>0) {
             images.forEach(function (img) {
                 fd.append('images', img)
@@ -311,6 +302,31 @@
             return;
         }
 
+        //_this.updataProgress(fd);
+
+        $.ajax({
+            url: apiURL,
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            beforeSend: function (xhr) {
+
+            },
+            success: function (json) {
+                if(debug) console.log(json);
+                callback && callback instanceof Function && callback(json);
+            },
+            error: function (e) {
+                _this._tips(e.statusText)
+            },
+            complete: function (e) {
+
+            }
+        })
+    };
+
+    Uploader.prototype.updataProgress = function (fd) {
         $('.fui-upload-progressbar').show();
         var xhr = new XMLHttpRequest();
 
@@ -337,7 +353,7 @@
             _this.timer = null;
             _this.timer = setTimeout(function () {
                 $('.fui-upload-progressbar').fadeOut();
-            }, 500)
+            }, 500);
             _this._tips('upload completed')
         }
         function transferFailed(evt) {
@@ -346,40 +362,19 @@
         function transferCanceled(evt) {
             alert("The transfer has been canceled by the user.");
         }
-        // $.ajax({
-        //     url: apiURL,
-        //     type: 'POST',
-        //     data: fd,
-        //     processData: false,
-        //     contentType: false,
-        //     beforeSend: function (xhr) {
-        //         //$('[type="submit"]').prop('disabled', true)
-        //         submitBtn.prop('disabled', true)
-        //     },
-        //     complete: function (res) {
-        //         submitBtn.prop('disabled', false);
-        //         if(debug) console.log(res.responseJSON);
-        //         callback && callback instanceof Function && callback(res);
-        //     }
-        // })
     };
-
     Uploader.prototype.closeUpload = function () {
-        $('.fui-mask').click(function () {
-            $(this).remove();
+        $('.fui-mask ,.fui-close').click(function () {
+            $('.fui-mask').remove();
             $('.fui-upload_box').remove();
         });
 
     };
 
-    var uploader = '';
-    $.fn.upload = function (url, opts, callback) {
+    $.fn.upload = function (url,opts, callback) {
         console.log(this);
-        uploader = new Uploader(this, url, opts, callback);
+        uploader = new Uploader(this, url,opts, callback);
         return uploader.showUpload();
 
     };
-    $.fn.submit = function (url, opts) {
-        return uploader.submit(url, opts);
-    }
 }(window, jQuery);
