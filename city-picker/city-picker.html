@@ -18,7 +18,7 @@
 
   <div class="city-select">
     <div class="city-title">
-
+sdf
     </div>
     <div class="fui-menu-button-dropdown">丄</div>
 
@@ -29,7 +29,8 @@
         <a href="#fui-tab3"  class="fui-tab_a">区县</a>
       </div>
       <div class="fui-tab_content fui-city-picker_content">
-        <div id="fui-tab1" class="fui-tab_item fui-city-picker_select">
+
+        <div id="fui-tab1" class="fui-tab_container fui-city-picker_select">
           <dl class="fui-city-hot clearfix">
             <dt class="fl">Hot</dt>
             <dd class="fl">
@@ -54,26 +55,12 @@
         </div>
 
         <!-- 城市 -->
-        <div id="fui-tab2" class="fui-tab_item fui-city-picker_select fui-city-picker_select-city">
-          <dl class="fui-city-hot clearfix">
-            <dd class="fl">
-              <a>北京</a>
-              <a>上海</a>
-              <a>广州</a>
-              <a>深圳</a>
-            </dd>
-          </dl>
+        <div id="fui-tab2" class="fui-tab_container fui-city-picker_select">
+          
         </div>
         <!-- 区县 -->
-        <div id="fui-tab3" class="fui-tab_item fui-city-picker_select fui-city-picker_select-district">
-          <dl class="fui-city-hot clearfix">
-            <dd class="fl">
-              <a>北京</a>
-              <a>上海</a>
-              <a>广州</a>
-              <a>羊刀</a>
-            </dd>
-          </dl>
+        <div id="fui-tab3" class="fui-tab_container fui-city-picker_select">
+          
         </div>
 
       </div>
@@ -89,7 +76,7 @@
   <script type="text/javascript" src="city-picker.js"></script>
   <script type="text/javascript">
     $(function() {
-      $('.city-picker').cityPicker();
+      $('.city-title').cityPicker();
     })
   </script>
 </body>

@@ -52,11 +52,18 @@
 .fui-city-picker_select-city dd a {
   padding: 4px 10px;
   white-space: nowrap;
+  float: left;
 }
 .fui-city-picker_select-city dd a {
 
 }
 .fui-city-picker_select dd a:hover {
+  background-color: #E64340;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.fui-city-picker_checked {
   background-color: #E64340;
   color: #fff;
   border-radius: 4px;
