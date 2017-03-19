@@ -26,11 +26,16 @@
     var _this = this,
     citiesData = this.citiesData;
 
-    citiesData.forEach(function(item, i, arr) {
-      var name = item.name;
-      //item.name = name.split('省')[0];
-      item.c = _this.transformPinyin(name);
-    });
+    // citiesData.forEach(function(item, i, arr) {
+    //   var name = item.name;
+    //   //item.name = name.split('省')[0];
+    //   item.c = _this.transformPinyin(name);
+    // });
+
+    for(var i =0; i < citiesData.length; i++) {
+      var name = citiesData[i].name;
+      citiesData[i].c = _this.transformPinyin(name);
+    }
 
     citiesData.sort(_this.sortBy('c'));
 
@@ -46,19 +51,31 @@
     str2_a = '',
     str3_a = '',
     str4_a = '';
-    citiesData.forEach(function(item, i, arr) {
-      var c = item.c.substring(0,1);
-      if(reg1.test(c) || item.name == '重庆') {
-        str1_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-      }else if(reg2.test(c)) {
-        str2_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-      }else if(reg3.test(c)) {
-        str3_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-      }else if(reg4.test(c)) {
-        str4_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-      }
+    // citiesData.forEach(function(item, i, arr) {
+    //   var c = item.c.substring(0,1);
+    //   if(reg1.test(c) || item.name == '重庆') {
+    //     str1_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+    //   }else if(reg2.test(c)) {
+    //     str2_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+    //   }else if(reg3.test(c)) {
+    //     str3_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+    //   }else if(reg4.test(c)) {
+    //     str4_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+    //   }
 
-    });
+    // });
+    for(var i = 0; i < citiesData.length; i++) {
+      var c = citiesData[i].c.substring(0,1);
+      if(reg1.test(c) || citiesData[i].name == '重庆') {
+        str1_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+      }else if(reg2.test(c)) {
+        str2_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+      }else if(reg3.test(c)) {
+        str3_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+      }else if(reg4.test(c)) {
+        str4_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+      }
+    }
     var dl_1 = '<dl class="fui-city-A-G clearfix"></dl>';
     var dl_2 = '<dl class="fui-city-H-K clearfix"></dl>';
     var dl_3 = '<dl class="fui-city-L-S clearfix"></dl>';
@@ -210,23 +227,35 @@
           switch (key) {
             case 'id1':
             if(!_this.addrs.id2) {
-              citiesData.forEach(function (item, index, arr) {
-                if(item.code == id) {
-                  _this.addrs.id2 = item.sub;
-                  _this.renderArea(_this.addrs.id2, '#fui-tab2');
+              // citiesData.forEach(function (item, index, arr) {
+              //   if(item.code == id) {
+              //     _this.addrs.id2 = item.sub;
+              //     _this.renderArea(_this.addrs.id2, '#fui-tab2');
+              //   }
+              // });
+              for(var i = 0; i<citiesData.length; i++) {
+                if(citiesData[i].code == id) {
+                  _this.addrs.id2 = citiesData[i].sub;
+                   _this.renderArea(_this.addrs.id2, '#fui-tab2');
                 }
-              });
+              }
             }
             
             break;
             case 'id2':
             if(!_this.addrs.id3) {
-            _this.addrs.id2.forEach(function (item, index, arr) {
-              if(item.code == id) {
-               _this.addrs.id3 = item.sub;
-               _this.renderArea(_this.addrs.id3, '#fui-tab3');
-             }
-           });
+           //  _this.addrs.id2.forEach(function (item, index, arr) {
+           //    if(item.code == id) {
+           //     _this.addrs.id3 = item.sub;
+           //     _this.renderArea(_this.addrs.id3, '#fui-tab3');
+           //   }
+           // });
+              for(var i = 0; i<_this.addrs.id2.length; i++) {
+                if(_this.addrs.id2[i].code == id) {
+                  _this.addrs.id3 = _this.addrs.id2[i].sub;
+                   _this.renderArea(_this.addrs.id3, '#fui-tab3');
+                }
+              }
             }
             
 
@@ -240,9 +269,12 @@
       var str = '',
       aStr = '';
       if($.isArray(citiesData)) {
-        citiesData.forEach(function (item, i, arr) {
-          aStr += '<a data-id='+item.code+'>'+item.name+'</a>';
-        });
+        // citiesData.forEach(function (item, i, arr) {
+        //   aStr += '<a data-id='+item.code+'>'+item.name+'</a>';
+        // });
+        for(var i = 0; i< citiesData.length; i++) {
+          aStr += '<a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>';
+        }
         str = '<dl class="fui-city-hot clearfix"><dt class="fl"></dt><dd class="fl" style="width: 100%">'+aStr+'</dd> </dl>';
 
         $container.html(str);
