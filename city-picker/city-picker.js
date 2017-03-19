@@ -166,6 +166,7 @@
             delete _this.checkedAddr['id'+i];
             delete _this.ids['id'+i];
             delete _this.addrs['id'+i];
+            $('#fui-tab'+ i).text('');
         }
         _this.filterCity(_this.ids);
 
