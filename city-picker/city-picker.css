@@ -47,7 +47,9 @@
   padding-left: 4%;
    cursor: pointer;
 }
-
+.fui-city-picker_select dt {
+  padding: 4px 0;
+}
 .fui-city-picker_select dd a ,
 .fui-city-picker_select-city dd a {
   padding: 4px 10px;
