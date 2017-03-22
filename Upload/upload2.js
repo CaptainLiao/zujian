@@ -19,7 +19,8 @@
             maxLen: 10,
             maxSize: 1,
             maxWidth: 5000,
-            quality: 1
+            quality: 1,
+            bgColor: '#E64340'
         };
         this.$el = $el;
         this.url = url;
@@ -45,7 +46,7 @@
 
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
-                '<a class="fui-close iconfont">&#xe6ac;</a>'+
+                '<a class="fui-close"></a>'+
                 '<div class="fui-upload_choose clearfix">'+
                 '<div class="fui-upload_input-box fl">'+
                 '<div>点击选择文件</div>'+
@@ -54,7 +55,7 @@
                 '<div class="fui-upload_drag fl" id="fui-upload_drag"><span class="clearfix2"></span></div>'+
                 '</div>'+
                 '<div class="fui-upload_status-bar clearfix">'+
-                '<div class="fui-upload_info fl">选中 0 个文件，共 0 M</div>'+
+                '<div class="fui-upload_info fl">选中 0 个文件，共 0.00 M</div>'+
                 '<div class="fui-upload_btn fr">'+
                 '<a class="fui-upload_add" type="button">继续添加</a>'+
                 '<a class="fui-upload_submit" type="button">点击上传</a>'+
@@ -65,6 +66,8 @@
                 '</ul>'+
                 '</div>';
             $('body').append(mask).append(upload);
+
+            _this.initUI();
             _this.change();
             _this.dragImg();
 
@@ -80,6 +83,34 @@
         })
     };
 
+    Uploader.prototype.initUI = function () {
+        var _this = this;
+        $('.fui-upload_preview_item').hover(
+            function () {
+                var del = $(this).find('.fui-icon-del');
+                del.stop().fadeIn();
+
+            },
+            function () {
+                var del = $(this).find('.fui-icon-del');
+                del.stop().fadeOut();
+
+            });
+
+        $('.fui-close').hover(
+            function () {
+                var $this = $(this);
+                $this.addClass('fui-hover');
+                $this.css('background-color', _this.options.bgColor)
+            },
+            function () {
+                var $this = $(this);
+                $this.removeClass('fui-hover');
+                $this.css('background-color', 'transparent')
+            }
+        );
+        $('.fui-upload_input-box>div, .fui-upload_submit, .fui-icon-del').css('background-color', this.options.bgColor)
+    };
     Uploader.prototype.dragImg = function () {
         var _this = this,
             dragBox = document.getElementById('fui-upload_drag');
@@ -149,7 +180,7 @@
 
             _this.fileSize +=file.size;
 
-            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt='+file.name+'> <a class="fui-icon-del iconfont">&#xe63d;</a></li>';
+            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt='+file.name+'> <a class="fui-icon-del"></a></li>';
             _this.images.push(file);
             //_this.compress(file, type);
 
@@ -165,17 +196,7 @@
     };
     Uploader.prototype.del = function () {
         var _this = this;
-        $('.fui-upload_preview_item').hover(
-            function () {
-                var del = $(this).find('.fui-icon-del');
-                del.stop().fadeIn();
-
-            },
-            function () {
-                var del = $(this).find('.fui-icon-del');
-                del.stop().fadeOut();
-
-            });
+        this.initUI();
 
         $('.fui-upload_box').on('click', '.fui-icon-del',function () {
             // 首先移除当前li标签（表面删除）
@@ -287,7 +308,8 @@
                 callback && callback instanceof Function && callback(json);
             },
             error: function (e) {
-                _this._tips(e.statusText)
+                _this._tips('上传失败：'+e.statusText)
+
             },
             complete: function (e) {
 
