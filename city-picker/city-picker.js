@@ -36,14 +36,57 @@
     };
 
     CityPicker.prototype.init = function () {
-        this.ui();
+        this.html();
+
         this.togglePicker();
         this.loadProvince();
         this.switchTab();
         this.chooseCity();
     };
 
+    CityPicker.prototype.html = function () {
+        var html = '<div class="city-select hide">'+
+            '<input type="text" class="city-title" readonly="readonly" placeholder="请选择地址"/>'+
+            '<div class="fui-menu-button-dropdown">'+
+            '</div>'+
+            '<div class="fui-city-picker">'+
+            '<div class="fui-tab clearfix">'+
+            '<a href="#fui-tab1" class="fui-tab_a fui-active">省份</a>'+
+            '<a href="#fui-tab2"  class="fui-tab_a">城市</a>'+
+            '<a href="#fui-tab3"  class="fui-tab_a">区县</a>'+
+            '</div>'+
+            '<div class="fui-tab_content fui-city-picker_content">'+
+            '<div id="fui-tab1" class="fui-tab_container fui-city-picker_select">'+
+            '<dl class="fui-city-A-G clearfix">'+
+            '<dt class="fl">A-G</dt>'+
+            '</dl>'+
+            '<dl class="fui-city-H-K clearfix">'+
+            '<dt class="fl">H-K</dt>'+
+            '</dl>'+
+            '<dl class="fui-city-L-S clearfix">'+
+            '<dt class="fl">L-S</dt>'+
+            '</dl>'+
+            '<dl class="fui-city-T-Z clearfix">'+
+            '<dt class="fl">T-Z</dt>'+
+            '</dl>'+
+            '</div>'+
+            '<!-- 城市 -->'+
+            '<div id="fui-tab2" class="fui-tab_container fui-city-picker_select">'+
+            '</div>'+
+            '<!-- 区县 -->'+
+            '<div id="fui-tab3" class="fui-tab_container fui-city-picker_select">'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>';
+
+        $('.my-city').html(html);
+        this.ui();
+    };
     CityPicker.prototype.ui = function () {
+        this.$cityPicker = $('.fui-city-picker');
+        this.$citySelect = $('.city-select');
+        this.$el = this.$el.find('.city-title');
         var $picker = this.$cityPicker,
             $citySelect = this.$citySelect,
             UI = this.UIopts;
