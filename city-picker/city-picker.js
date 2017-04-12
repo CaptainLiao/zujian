@@ -210,8 +210,8 @@
                 len = $('.fui-tab_a').length;
 
             if(!$(this).hasClass('fui-active')) {
-                $('.fui-active').css('color', UI.color);
-                $(this).addClass('fui-active').css('color', UI.color)
+
+                $(this).addClass('fui-active')
                     .siblings().removeClass('fui-active');
 
                 _this.index = $index;
@@ -347,7 +347,7 @@
             $container.html(str);
 
             $container.removeClass('hide').siblings().addClass('hide');
-            $('.fui-tab').find('a[href='+containerid+']').addClass('fui-active').css('color', UI.color)
+            $('.fui-tab').find('a[href='+containerid+']').addClass('fui-active')
                 .siblings().removeClass('fui-active');
 
             this.chooseCity();
