@@ -5,22 +5,14 @@
   <title>city-picker</title>
   <link rel="stylesheet" type="text/css" href="../reset.css">
   <link rel="stylesheet" type="text/css" href="city-picker.css">
-  <style type="text/css">
-    .city-select {
-      width: 300px;
-      height: 20px;
-      border: 1px solid #D9D9D9;
-      position: relative;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="city-select">
-    <div class="city-title">
-sdf
+  <div class="city-select hide">
+
+    <input type="text" class="city-title" readonly="readonly" placeholder="请选择地址"/>
+    <div class="fui-menu-button-dropdown">
     </div>
-    <div class="fui-menu-button-dropdown">丄</div>
 
     <div class="fui-city-picker">
       <div class="fui-tab clearfix">
@@ -31,15 +23,7 @@ sdf
       <div class="fui-tab_content fui-city-picker_content">
 
         <div id="fui-tab1" class="fui-tab_container fui-city-picker_select">
-          <dl class="fui-city-hot clearfix">
-            <dt class="fl">Hot</dt>
-            <dd class="fl">
-              <a>北京</a>a
-              <a>上海</a>
-              <a>广州</a>
-              <a></a>
-            </dd>
-          </dl>
+
           <dl class="fui-city-A-G clearfix">
           <dt class="fl">A-G</dt>
           </dl>
@@ -76,7 +60,13 @@ sdf
   <script type="text/javascript" src="city-picker.js"></script>
   <script type="text/javascript">
     $(function() {
-      $('.city-title').cityPicker();
+        var opts = {
+            width: 500,
+            height: 30,
+            bgColor: 'green',
+            color: 'blue'
+        };
+      $('.city-title').cityPicker(opts);
     })
   </script>
 </body>

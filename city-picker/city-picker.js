@@ -1,114 +1,171 @@
 ;!(function (window, $, undefined) {
 
-  var CityPicker = function ($el) {
+    /**
+     * @param   {[String]}  $el 选择元素
+     * @param   {[Object]}  opts 自定义皮肤
+     * opts = {
+            width: 300,
+            height: 30,
+            bgColor: '#E64340',
+            color: '#E64340',
+            hoverColor: '#E64340'
+        }
+     */
+    var CityPicker = function ($el, opts) {
+        this.$el = $el;
+        this.citiesData = window.fui_citiesData;
+        // 城市地址信息
+        this.addrs = {};
+        this.index = 1;
 
-    this.$el = $el;
-    this.citiesData = window.fui_citiesData;
-    // 城市地址信息
-    this.addrs = {};
-    this.index = 1;
+        // 被选中地址的code
+        this.ids = {};
+        // 被选中的地址信息
+        this.checkedAddr = {};
+        this.$cityPicker = $('.fui-city-picker');
+        this.$citySelect = $('.city-select');
+        console.log(this.citiesData)
+        var defaults = {
+            width: 300,
+            height: 30,
+            bgColor: '#E64340',
+            color: '#E64340'
+        };
+        this.UIopts = $.extend({}, defaults, opts);
+    };
 
-    // 被选中地址的code
-    this.ids = {};
-    // 被选中的地址信息
-    this.checkedAddr = {};
+    CityPicker.prototype.init = function () {
+        this.ui();
 
-    console.log(this.citiesData)
-  };
+        this.togglePicker();
+        this.loadProvince();
+        this.switchTab();
+        this.chooseCity();
+    };
 
-  CityPicker.prototype.init = function () {
-    this.loadProvince();
-    this.switchTab(); 
-    this.chooseCity();
-  };
+    CityPicker.prototype.ui = function () {
+        var $picker = this.$cityPicker,
+            $citySelect = this.$citySelect,
+            UI = this.UIopts;
 
-  CityPicker.prototype.loadProvince = function () {
-    var _this = this,
-    citiesData = this.citiesData;
+        // 宽度
+        $citySelect.width(UI.width);
+        $citySelect.height(UI.height);
+        $picker.width(UI.width + 2);
+        $('.fui-city-picker_checked').css('background-color', UI.bgColor);
+        $('.fui-active').css('color', UI.color);
+        $('.fui-tab-hover').css('color', UI.color);
+        $('.fui-tab_content-hover').css('background-color', UI.color);
 
-    // citiesData.forEach(function(item, i, arr) {
-    //   var name = item.name;
-    //   //item.name = name.split('省')[0];
-    //   item.c = _this.transformPinyin(name);
-    // });
 
-    for(var i =0; i < citiesData.length; i++) {
-      var name = citiesData[i].name;
-      citiesData[i].c = _this.transformPinyin(name);
-    }
+        $('.fui-tab_content').on('click', 'a', function () {
+            $(this).parents('.fui-tab_container').find('a').removeClass('fui-city-picker_checked').removeAttr('style');
+            $(this).addClass('fui-city-picker_checked');
+            $('.fui-city-picker_checked').css('background-color', UI.bgColor)
 
-    citiesData.sort(_this.sortBy('c'));
+        });
 
-    this.renderProvence(citiesData);
-  };
+        $citySelect.removeClass('hide');
 
-  CityPicker.prototype.renderProvence = function(citiesData) {
-    var reg1 = /[A-G]/i,
-    reg2 = /[H-K]/i,
-    reg3 = /[L-S]/i,
-    reg4 = /[T-Z]/i,
-    str1_a = '',
-    str2_a = '',
-    str3_a = '',
-    str4_a = '';
-    // citiesData.forEach(function(item, i, arr) {
-    //   var c = item.c.substring(0,1);
-    //   if(reg1.test(c) || item.name == '重庆') {
-    //     str1_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-    //   }else if(reg2.test(c)) {
-    //     str2_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-    //   }else if(reg3.test(c)) {
-    //     str3_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-    //   }else if(reg4.test(c)) {
-    //     str4_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-    //   }
+    };
 
-    // });
-    for(var i = 0; i < citiesData.length; i++) {
-      var c = citiesData[i].c.substring(0,1);
-      if(reg1.test(c) || citiesData[i].name == '重庆') {
-        str1_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
-      }else if(reg2.test(c)) {
-        str2_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
-      }else if(reg3.test(c)) {
-        str3_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
-      }else if(reg4.test(c)) {
-        str4_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
-      }
-    }
-    var dl_1 = '<dl class="fui-city-A-G clearfix"></dl>';
-    var dl_2 = '<dl class="fui-city-H-K clearfix"></dl>';
-    var dl_3 = '<dl class="fui-city-L-S clearfix"></dl>';
-    var dl_4 = '<dl class="fui-city-T-Z clearfix"></dl>';
-    $('.fui-city-A-G').append('<dd class="fl">'+str1_a+'</dd>');
-    $('.fui-city-H-K').append('<dd class="fl">'+str2_a+'</dd>');
-    $('.fui-city-L-S').append('<dd class="fl">'+str3_a+'</dd>');
-    $('.fui-city-T-Z').append('<dd class="fl">'+str4_a+'</dd>');
+    CityPicker.prototype.togglePicker = function () {
+        var $picker = this.$cityPicker;
+        $('.fui-menu-button-dropdown').click(function () {
+            $picker.stop().slideToggle();
+            $(this).toggleClass('fui-rotate')
+        });
+        $('.city-title').on('click',function () {
+            $('.fui-menu-button-dropdown').triggerHandler('click');
+        })
+    };
 
-    $('.fui-city-A-G').find('[data-id="110000"]')
-    .after($('.fui-city-A-G').find('[data-id="500000"]'));
-  };
+    CityPicker.prototype.loadProvince = function () {
+        var _this = this,
+            citiesData = this.citiesData;
 
+        // citiesData.forEach(function(item, i, arr) {
+        //   var name = item.name;
+        //   //item.name = name.split('省')[0];
+        //   item.c = _this.transformPinyin(name);
+        // });
+
+        for(var i =0; i < citiesData.length; i++) {
+            var name = citiesData[i].name;
+            citiesData[i].c = _this.transformPinyin(name);
+        }
+
+        citiesData.sort(_this.sortBy('c'));
+
+        this.renderProvence(citiesData);
+    };
+
+    CityPicker.prototype.renderProvence = function(citiesData) {
+        var reg1 = /[A-G]/i,
+            reg2 = /[H-K]/i,
+            reg3 = /[L-S]/i,
+            reg4 = /[T-Z]/i,
+            str1_a = '',
+            str2_a = '',
+            str3_a = '',
+            str4_a = '';
+        // citiesData.forEach(function(item, i, arr) {
+        //   var c = item.c.substring(0,1);
+        //   if(reg1.test(c) || item.name == '重庆') {
+        //     str1_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+        //   }else if(reg2.test(c)) {
+        //     str2_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+        //   }else if(reg3.test(c)) {
+        //     str3_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+        //   }else if(reg4.test(c)) {
+        //     str4_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
+        //   }
+
+        // });
+        for(var i = 0; i < citiesData.length; i++) {
+            var c = citiesData[i].c.substring(0,1);
+            if(reg1.test(c) || citiesData[i].name == '重庆') {
+                str1_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+            }else if(reg2.test(c)) {
+                str2_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+            }else if(reg3.test(c)) {
+                str3_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+            }else if(reg4.test(c)) {
+                str4_a += ' <a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>'
+            }
+        }
+        var dl_1 = '<dl class="fui-city-A-G clearfix"></dl>';
+        var dl_2 = '<dl class="fui-city-H-K clearfix"></dl>';
+        var dl_3 = '<dl class="fui-city-L-S clearfix"></dl>';
+        var dl_4 = '<dl class="fui-city-T-Z clearfix"></dl>';
+        $('.fui-city-A-G').append('<dd class="fl">'+str1_a+'</dd>');
+        $('.fui-city-H-K').append('<dd class="fl">'+str2_a+'</dd>');
+        $('.fui-city-L-S').append('<dd class="fl">'+str3_a+'</dd>');
+        $('.fui-city-T-Z').append('<dd class="fl">'+str4_a+'</dd>');
+
+        $('.fui-city-A-G').find('[data-id="110000"]')
+            .after($('.fui-city-A-G').find('[data-id="500000"]'));
+    };
 
     // 对城市列表按照首字母进行排序
     CityPicker.prototype.sortBy = function(name) {
-      return function (o, p) {
-        var a, b;
-        if (typeof o === "object" && typeof p === "object" && o && p) {
-          a = o[name];
-          b = p[name];
-          if (a === b) {
-            return 0;
-          }
-          if (typeof a === typeof b) {
-            return a < b ? -1 : 1;
-          }
-          return typeof a < typeof b ? -1 : 1;
+        return function (o, p) {
+            var a, b;
+            if (typeof o === "object" && typeof p === "object" && o && p) {
+                a = o[name];
+                b = p[name];
+                if (a === b) {
+                    return 0;
+                }
+                if (typeof a === typeof b) {
+                    return a < b ? -1 : 1;
+                }
+                return typeof a < typeof b ? -1 : 1;
+            }
+            else {
+                throw ("error");
+            }
         }
-        else {
-          throw ("error");
-        }
-      }
     };
 
     // 汉字转拼音首字母
@@ -120,174 +177,175 @@
 
         return name;
         function translateCode (value){
-          for(var name in pinyin){
-            var t=pinyin[name];
-            if(t.indexOf(value) != -1){
-              return name;
+            for(var name in pinyin){
+                var t=pinyin[name];
+                if(t.indexOf(value) != -1){
+                    return name;
+                }
             }
-          }
         }
-      };
+    };
 
     // tab 切换
     CityPicker.prototype.switchTab = function () {
-      var _this = this,
-      tabContentItem = $('.fui-tab_container');
+        var _this = this,
+            tabContentItem = $('.fui-tab_container'),
+            UI = this.UIopts;
 
-      tabContentItem.addClass('hide')
-      .eq(0).removeClass('hide');
+        tabContentItem.addClass('hide')
+            .eq(0).removeClass('hide');
 
-      $('.fui-tab').on('click', '.fui-tab_a', function () {
-        var $index = $(this).index(),
-        len = $('.fui-tab_a').length;
+        $('.fui-tab').on('click', '.fui-tab_a', function () {
+            var $index = $(this).index(),
+                len = $('.fui-tab_a').length;
 
-        if(!$(this).hasClass('fui-active')) {
-          $(this).addClass('fui-active').siblings().removeClass('fui-active');
+            if(!$(this).hasClass('fui-active')) {
+                $('.fui-active').css('color', UI.color);
+                $(this).addClass('fui-active').css('color', UI.color)
+                    .siblings().removeClass('fui-active').removeAttr('style');
 
-          _this.index = $index;
+                _this.index = $index;
 
-          tabContentItem
-            .eq($index).removeClass('hide')
-            .siblings().addClass('hide');
-        }
-    });
+                tabContentItem
+                    .eq($index).removeClass('hide')
+                    .siblings().addClass('hide');
+            }
+        });
 
 
     };
     CityPicker.prototype.chooseCity = function () {
-      var $index = this.index,
-      _this = this,
-      $showTxt = this.$el;
+        var $index = this.index,
+            _this = this,
+            $showTxt = this.$el;
 
-      $('#fui-tab'+ $index).off('click').on('click', 'a', function () {
+        $('#fui-tab'+ $index).off('click').on('click', 'a', function () {
 
-        var id = $(this).data('id'),
-            xid = 'id'+ $index,
-            parentsIndex = $(this).parents('.fui-tab_container').index(),
-            len = $('.fui-tab_container').length;
+            var id = $(this).data('id'),
+                xid = 'id'+ $index,
+                parentsIndex = $(this).parents('.fui-tab_container').index(),
+                len = $('.fui-tab_container').length;
 
-
-       
-
-        _this.index = parentsIndex + 2;
+            _this.index = parentsIndex + 2;
 
 
-        _this.ids[xid] = id;
-        _this.checkedAddr[xid] = $(this).text();
-       
-       if(!$(this).hasClass('fui-city-picker_checked')) {
+            _this.ids[xid] = id;
+            _this.checkedAddr[xid] = $(this).text();
 
-       }
-        
-        for(var i = parentsIndex+2; i<=len; i++) {
-            delete _this.checkedAddr['id'+i];
-            delete _this.ids['id'+i];
-            delete _this.addrs['id'+i];
-            $('#fui-tab'+ i).text('');
-        }
-        _this.filterCity(_this.ids);
+            if(!$(this).hasClass('fui-city-picker_checked')) {
 
-        _this.getCityInfo(_this.checkedAddr); 
+            }
 
-        $(this).parents('.fui-tab_container').find('a').removeClass('fui-city-picker_checked');
-       
-        $(this).addClass('fui-city-picker_checked')   
+            for(var i = parentsIndex+2; i<=len; i++) {
+                delete _this.checkedAddr['id'+i];
+                delete _this.ids['id'+i];
+                delete _this.addrs['id'+i];
+                $('#fui-tab'+ i).text('');
+            }
+            _this.filterCity(_this.ids);
 
-      })
+            _this.getCityInfo(_this.checkedAddr);
+
+            if($index === 3) {
+                $('.fui-menu-button-dropdown').triggerHandler('click');
+            }
+
+        })
     };
     /**
      * 得到选择的地址信息
      * @param  {Object} oAddr [选中文字内容]
      */
-     CityPicker.prototype.getCityInfo = function (oAddr) {
-      var k, str = '';
-      for (var k in oAddr) {
-        if(oAddr.hasOwnProperty(k)) {
-          str += oAddr[k]
+    CityPicker.prototype.getCityInfo = function (oAddr) {
+        var k, str = '';
+        for (var k in oAddr) {
+            if(oAddr.hasOwnProperty(k)) {
+                str += oAddr[k] +'-'
+            }
         }
-      }
-      console.log(str)
-      this.$el.text(str);
+        console.log(str)
+        this.$el.val(str.substring(0, str.length-1));
     };
     // 根据城市 ID 筛选下一级城市或地区
     CityPicker.prototype.filterCity = function (opts) {
-      console.log(opts)
-      var _this = this,
-        citiesData = this.citiesData,
-        cities = [],
-        areas = [];
-      if(!(opts instanceof Object)) {
-        alert('ID参数出错！');
-        return false;
-      }
-
-      for(var key in opts) {
-        if(opts.hasOwnProperty(key)) {
-          var id = opts[key];
-          switch (key) {
-            case 'id1':
-            if(!_this.addrs.id2) {
-              // citiesData.forEach(function (item, index, arr) {
-              //   if(item.code == id) {
-              //     _this.addrs.id2 = item.sub;
-              //     _this.renderArea(_this.addrs.id2, '#fui-tab2');
-              //   }
-              // });
-              for(var i = 0; i<citiesData.length; i++) {
-                if(citiesData[i].code == id) {
-                  _this.addrs.id2 = citiesData[i].sub;
-                   _this.renderArea(_this.addrs.id2, '#fui-tab2');
-                }
-              }
-            }
-            
-            break;
-            case 'id2':
-            if(!_this.addrs.id3) {
-           //  _this.addrs.id2.forEach(function (item, index, arr) {
-           //    if(item.code == id) {
-           //     _this.addrs.id3 = item.sub;
-           //     _this.renderArea(_this.addrs.id3, '#fui-tab3');
-           //   }
-           // });
-              for(var i = 0; i<_this.addrs.id2.length; i++) {
-                if(_this.addrs.id2[i].code == id) {
-                  _this.addrs.id3 = _this.addrs.id2[i].sub;
-                   _this.renderArea(_this.addrs.id3, '#fui-tab3');
-                }
-              }
-            }
-            
-
-            break;
-          }
+        var _this = this,
+            citiesData = this.citiesData,
+            cities = [],
+            areas = [];
+        if(!(opts instanceof Object)) {
+            alert('ID参数出错！');
+            return false;
         }
-      }
+
+        for(var key in opts) {
+            if(opts.hasOwnProperty(key)) {
+                var id = opts[key];
+                switch (key) {
+                    case 'id1':
+                        if(!_this.addrs.id2) {
+                            // citiesData.forEach(function (item, index, arr) {
+                            //   if(item.code == id) {
+                            //     _this.addrs.id2 = item.sub;
+                            //     _this.renderArea(_this.addrs.id2, '#fui-tab2');
+                            //   }
+                            // });
+                            for(var i = 0; i<citiesData.length; i++) {
+                                if(citiesData[i].code == id) {
+                                    _this.addrs.id2 = citiesData[i].sub;
+                                    _this.renderArea(_this.addrs.id2, '#fui-tab2');
+                                }
+                            }
+                        }
+
+                        break;
+                    case 'id2':
+                        if(!_this.addrs.id3) {
+                            //  _this.addrs.id2.forEach(function (item, index, arr) {
+                            //    if(item.code == id) {
+                            //     _this.addrs.id3 = item.sub;
+                            //     _this.renderArea(_this.addrs.id3, '#fui-tab3');
+                            //   }
+                            // });
+                            for(var i = 0; i<_this.addrs.id2.length; i++) {
+                                if(_this.addrs.id2[i].code == id) {
+                                    _this.addrs.id3 = _this.addrs.id2[i].sub;
+                                    _this.renderArea(_this.addrs.id3, '#fui-tab3');
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+        }
     };
     CityPicker.prototype.renderArea = function (citiesData, containerid) {
-      var $container = $(containerid);
-      var str = '',
-      aStr = '';
-      if($.isArray(citiesData)) {
-        // citiesData.forEach(function (item, i, arr) {
-        //   aStr += '<a data-id='+item.code+'>'+item.name+'</a>';
-        // });
-        for(var i = 0; i< citiesData.length; i++) {
-          aStr += '<a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>';
+        var $container = $(containerid);
+        var str = '',
+            aStr = '',
+            UI = this.UIopts;
+        if($.isArray(citiesData)) {
+            // citiesData.forEach(function (item, i, arr) {
+            //   aStr += '<a data-id='+item.code+'>'+item.name+'</a>';
+            // });
+            for(var i = 0; i< citiesData.length; i++) {
+                aStr += '<a data-id='+citiesData[i].code+'>'+citiesData[i].name+'</a>';
+            }
+            str = '<dl class="fui-city-hot clearfix"><dt class="fl"></dt><dd class="fl" style="width: 100%">'+aStr+'</dd> </dl>';
+
+            $container.html(str);
+
+            $container.removeClass('hide').siblings().addClass('hide');
+            $('.fui-tab').find('a[href='+containerid+']').addClass('fui-active').css('color', UI.color)
+                .siblings().removeClass('fui-active').removeAttr('style');
+
+            this.chooseCity();
+        }else {
+            $('.fui-menu-button-dropdown').triggerHandler('click');
         }
-        str = '<dl class="fui-city-hot clearfix"><dt class="fl"></dt><dd class="fl" style="width: 100%">'+aStr+'</dd> </dl>';
-
-        $container.html(str);
-
-        $container.removeClass('hide').siblings().addClass('hide');
-        $('.fui-tab').find('a[href='+containerid+']').addClass('fui-active').siblings().removeClass('fui-active');
-
-        this.chooseCity();
-      }
     };
-    $.fn.cityPicker = function() {
-      var cityPicker = new CityPicker(this);
-      return cityPicker.init();
+    $.fn.cityPicker = function(opts) {
+        var cityPicker = new CityPicker(this, opts);
+        return cityPicker.init();
     }
 
-  })(window, jQuery);
+})(window, jQuery);
