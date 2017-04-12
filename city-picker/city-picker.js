@@ -24,19 +24,19 @@
         this.checkedAddr = {};
         this.$cityPicker = $('.fui-city-picker');
         this.$citySelect = $('.city-select');
-        console.log(this.citiesData)
+        // console.log(this.citiesData)
         var defaults = {
-            width: 300,
+            width: 360,
             height: 30,
-            bgColor: '#E64340',
-            color: '#E64340'
+            bgColor: '#EAEAEA',
+            color: '#E64340',
+            borderColor: '#D9D9D9'
         };
         this.UIopts = $.extend({}, defaults, opts);
     };
 
     CityPicker.prototype.init = function () {
         this.ui();
-
         this.togglePicker();
         this.loadProvince();
         this.switchTab();
@@ -47,26 +47,36 @@
         var $picker = this.$cityPicker,
             $citySelect = this.$citySelect,
             UI = this.UIopts;
+        var fuiActive = '.fui-active {' +
+                'color: '+UI.color+
+                ';border-bottom: 1px solid #fff!important'+
+            '}';
+        var cityPickerHover = '.fui-city-picker_select dd a:hover {' +
+                'background-color: '+UI.color+
+            '}';
+        var cityPickerChecked = '.fui-city-picker_checked {' +
+                'background-color: '+UI.color+
+            '}';
+        var tabHover = '.fui-tab_a:hover {' +
+                'color: '+UI.color+
+            '}';
+        var borderColor = '.fui-city-picker_content,.city-select, .fui-city-picker, .fui-tab_a, .fui-tab {' +
+                'border-color:' + UI.borderColor+
+            '}';
+        var bgColor = '.fui-tab {' +
+            'background-color:' + UI.bgColor+
+            '}';
+        var style = '<style>'+
+                fuiActive + cityPickerChecked+ cityPickerHover+ tabHover+ borderColor+ bgColor+
+            '</style>';
+        $('head').append(style);
 
         // 宽度
         $citySelect.width(UI.width);
         $citySelect.height(UI.height);
         $picker.width(UI.width + 2);
-        $('.fui-city-picker_checked').css('background-color', UI.bgColor);
-        $('.fui-active').css('color', UI.color);
-        $('.fui-tab-hover').css('color', UI.color);
-        $('.fui-tab_content-hover').css('background-color', UI.color);
-
-
-        $('.fui-tab_content').on('click', 'a', function () {
-            $(this).parents('.fui-tab_container').find('a').removeClass('fui-city-picker_checked').removeAttr('style');
-            $(this).addClass('fui-city-picker_checked');
-            $('.fui-city-picker_checked').css('background-color', UI.bgColor)
-
-        });
 
         $citySelect.removeClass('hide');
-
     };
 
     CityPicker.prototype.togglePicker = function () {
@@ -202,7 +212,7 @@
             if(!$(this).hasClass('fui-active')) {
                 $('.fui-active').css('color', UI.color);
                 $(this).addClass('fui-active').css('color', UI.color)
-                    .siblings().removeClass('fui-active').removeAttr('style');
+                    .siblings().removeClass('fui-active');
 
                 _this.index = $index;
 
@@ -250,6 +260,8 @@
                 $('.fui-menu-button-dropdown').triggerHandler('click');
             }
 
+            $(this).parents('.fui-tab_container').find('a').removeClass('fui-city-picker_checked');
+            $(this).addClass('fui-city-picker_checked');
         })
     };
     /**
@@ -336,7 +348,7 @@
 
             $container.removeClass('hide').siblings().addClass('hide');
             $('.fui-tab').find('a[href='+containerid+']').addClass('fui-active').css('color', UI.color)
-                .siblings().removeClass('fui-active').removeAttr('style');
+                .siblings().removeClass('fui-active');
 
             this.chooseCity();
         }else {
