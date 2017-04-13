@@ -86,6 +86,7 @@
             }
         });
         this.rules = res;
+        console.log(this.rules)
     };
 
     Validator.prototype.check = function () {
@@ -138,8 +139,12 @@
                         }
 
                     } else { // 值为空
-                        errorMsg = '<span class="error-msg">请输入'+placeholderTxt+'</span>'
+                        // 不要求必填(required为空)，但对所填字段进行验证
+                        if(item[key]) {
+                            errorMsg = '<span class="error-msg">请输入'+placeholderTxt+'</span>'
+                        }
                     }
+
                     if($('.error-msg').length > 0) return;
 
                     // 验证输入，显示提示信息
