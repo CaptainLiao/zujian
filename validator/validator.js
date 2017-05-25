@@ -192,3 +192,10 @@
         return validate.init();
     };
 })(window, jQuery, undefined);
+
+
+(function (define) {
+    define(function (require, exports) {
+
+    })
+})(typeof define === 'function' ? define: function(factory){factory(require, exports)});
