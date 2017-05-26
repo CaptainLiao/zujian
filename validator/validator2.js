@@ -14,7 +14,9 @@ var VerifyPolicies = {
     },
     // 是否相等
     isEqualTo: function (value, toDom, errMsg) {
-        if(value !== toDom.value) return errMsg;
+        var toValue = document.getElementById(toDom).value;
+
+        if(value !== toValue) return errMsg;
     }
 };
 
@@ -23,6 +25,7 @@ function FormValidator(VerifyPolicy) {
     // 待执行的验证函数数组
     this.validateFn = [];
 }
+
 
 FormValidator.prototype.add = function(dom, rules, errMsg) {
     var _this = this;
@@ -33,10 +36,9 @@ FormValidator.prototype.add = function(dom, rules, errMsg) {
         var ruleName = rule[0];
         var ruleParam = rule[1];
         var value = dom.value;
-        console.log(dom,value);
 
         args.push(value);
-        if(ruleParam) args.push(ruleParam);
+        if(ruleParam) args.push(ruleParam.trim());
         args.push(errMsg);
 
         // 这里调用apply只是为了传参，如果支持ES6，也可以这样做：
