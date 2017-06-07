@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     // 配置生成 Source Maps
@@ -26,13 +28,33 @@ module.exports = {
             }
         ]
     },
+    //
+    plugins: [
+        new webpack.BannerPlugin("Copyright Flying Unicorns inc."),//在这个数组中new一个就可以了
+        new HtmlWebpackPlugin({
+           template: __dirname + '/app/index.tmpl.html'
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+            },
+            output: {
+                comments: false
+            }
+        }),
+
+        //热加载插件
+        new webpack.HotModuleReplacementPlugin()
+    ],
 
     // 自动刷新浏览器
     // 依赖 webpack-dev-server
     devServer: {
-        contentBase: '/public', // 本地服务器加载页面所在的目录
-        colors: true,   // 终端输出结果为彩色
-        historyApiFallback: true,   // 在spa中，所有页面跳转都指向index.html
-        inline: true    // 当源文件改变是自动刷新页面
+        contentBase: path.join(__dirname, 'public'), //本地服务器所加载的页面所在的目录
+        historyApiFallback: true, //不跳转
+        inline: true, //实时刷新,
+        publicPath: '/',
+        port: 3001
     }
+
 };
