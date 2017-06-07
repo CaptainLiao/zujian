@@ -11,6 +11,9 @@
             display: block;
         }
     </style>
+    <link rel="stylesheet" href="webuploader.css">
+    <script src="../jquery-1.8.3.min.js"></script>
+    <script src="./webuploader.js"></script>
 </head>
 <body>
 
@@ -19,9 +22,8 @@
     <div id="fileList" class="uploader-list"></div>
     <div id="filePicker">选择图片</div>
 </div>
-<input type="file" multiple="multiple">
-<script src="jquery-1.8.3.min.js"></script>
-<script src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.min.js"></script>
+<button type="button" id="submit-btn">提交</button>
+
 <script>
 
     // 图片上传demo
@@ -42,10 +44,10 @@
         uploader = WebUploader.create({
 
             // 自动上传。
-            auto: true,
+            auto: false,
 
             // swf文件路径
-            swf: 'http://cdn.staticfile.org/webuploader/0.1.0/webuploader.min.js',
+            swf: './Uploader.swf',
 
             // 文件接收服务端。
             server: 'http://webuploader.duapp.com/server/fileupload.php',
@@ -61,7 +63,10 @@
                 mimeTypes: 'image/*'
             }
         });
+        $('#submit-btn').on('click', function () {
 
+            uploader.upload();
+        });
         // 当有文件添加进来的时候
         uploader.on( 'fileQueued', function( file ) {
             var $li = $(

@@ -47,9 +47,21 @@ FormValidator.prototype.add = function(dom, rules, errMsg) {
     })
 };
 
+FormValidator.prototype.single = function () {
+
+};
+
 FormValidator.prototype.start = function() {
-    for(var i =0; ; i++) {
-        var msg = this.validateFn[i]();
-        if(msg) return msg;
+    var fn = this.validateFn,
+            len = fn.length;
+    for(var i = 0; i< len ; i++) {
+        var msg = fn[i]();
+        if(msg && Object.keys(msg).length > 0) {
+            return {
+                index: i,
+                msg: msg
+            };
+        }
     }
+
 };
