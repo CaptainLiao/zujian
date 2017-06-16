@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>Title</title>
+</head>
+<style>
+    li {
+        list-style-type: none;
+        margin-top: 10px;
+    }
+    li label {
+        width: 60px;
+        margin-right: 20px;
+        text-align: right;
+        display: inline-block;
+    }
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    }
+    input {
+        outline: none;
+        border: 1px solid #ccc;
+    }
+</style>
+<body>
+<form action="">
+    <ul>
+        <li><label for="username">用户名</label>
+            <input type="text" name="username" id="username" placeholder="用户名"/></li>
+        <li>
+            <label for="password">密码</label>
+            <input type="text" name="password" id="password" placeholder="密码"/>
+        </li>
+        <li>
+            <label for="phone">手机</label>
+            <input type="text" name="phone" id="phone"/>
+        </li>
+        <li>
+            <label for="email">邮箱</label>
+            <input type="text" name="email" id="email"/>
+        </li>
+    </ul>
+
+    <button type="submit" id="submit-btn">提交</button>
+
+</form>
+<script src="jquery-1.8.3.min.js"></script>
+<script>
+function foo() {
+    return bar();
+}
+function bar() {
+    return baz();
+}
+function baz() {
+    debugger;
+}
+foo();
+</script>
+<!--<script>
+
+
+    window.onload = function () {
+
+        ;!function fixPlaceholder() {
+            var hasPlaceholder = 'placeholder' in document.createElement('input');
+            if(!hasPlaceholder) {
+                $(document).on('blur', '[placeholder]', function () {
+                    if($(this).val() == '') {
+                        $(this).val($(this).attr('placeholder'))
+                    }
+                }).on('focus', '[placeholder]', function () {
+                    var $this = $(this);
+                    if($this.val() == $this.attr('placeholder')) {
+                        var r = $this.createTextRange();
+                        r.collapse(true);
+                        r.select();
+                        if (typeof($this.onselectstart) != "undefined") {
+                            // IE下禁止元素被选取
+                            $this.onselectstart = new Function("return false");
+                        }
+                    }
+
+                }).on('keydown','[placeholder]', function () {
+                    var $this = $(this);
+                    if($this.val() == $this.attr('placeholder')) {
+                        $this.val('');
+                    }
+
+                    if (typeof($this.onselectstart) != "undefined") {
+                        // IE下禁止元素被选取
+                        $this.onselectstart = new Function("return false");
+                    }
+                });
+
+                $('[placeholder]').blur();
+            }
+        }();
+
+
+        function checkValid_h5($input, reg, errMsg) {
+            var charCode = '';
+
+            $input.on('blur', function (e) {
+                charCode = typeof e.keyCode == 'number' ? e.keyCode : e.charCode;
+
+                console.log(charCode);
+                console.log($input.val());
+                if(charCode) {
+                    if(charCode > 9 && !event.ctrlKey) {
+                        alert(errMsg);
+                        return false;
+                    }
+                }else {
+                    if(!reg.test($input.val())) {
+                        alert(errMsg);
+                        return false;
+                    }
+                }
+
+            })
+
+        }
+
+
+        function checkValid($input, reg, errMsg) {
+            $input
+                .on('blur', function () {
+                    var $this = $(this),
+                        errorMsg = '',
+                        val = $this.val(),
+                        placeholderTxt = $(this).attr("placeholder") ? $(this).attr("placeholder") : '信息';
+
+                    // 定义错误提示信息
+                    if(val == '' || val == null) {
+                        errorMsg = '<span class="error-msg">请输入'+placeholderTxt+'</span>'
+                    }else {
+                        errorMsg = '<span class="error-msg">*'+errMsg+'</span>';
+                    }
+
+                    if($('.error-msg').length > 0) return;
+
+                    // 验证输入，显示提示信息
+                    if(!reg.test(val)) {
+
+                        if($this.siblings('.error-msg').length == 0) {
+                            $this.after(errorMsg)
+                                .siblings('.error-msg')
+                                .hide()
+                                .fadeIn();
+                        }
+
+                    }else {
+                        $this.siblings('.error-msg').remove();
+                    }
+                })
+                .on('focus', function () {
+                    $(this).siblings('.error-msg').remove();
+                })
+        }
+
+        checkValid($('#username'), /^\w{6,12}$/, '请输入6-12位用户名');
+        checkValid($('#password'), /^(?![0-9]+$)(?![a-zA-Z]+$).{6,20}$/, '请输入6-12位密码');
+        checkValid($('#phone'), /^1[34578]\d{9}$/, '请输入有效的手机号码');
+        checkValid($('#email'), /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/, '请输入正确的邮箱');
+
+
+        $('#submit-btn').click(function () {
+            $('#username, #password, #phone, #email').trigger('blur');
+
+            if($('.error-msg').length > 0) {
+                console.log('有错误信息');
+                return false;
+            }else {
+                alert('提交成功')
+            }
+        });
+
+//        $('#box').on('keyup', function (e) {
+//            console.log(e);
+//            var charCode = typeof e.charCode == 'number' ? e.charCode : e.keyCode;
+//            console.log(charCode)
+//            console.log(String.fromCharCode(charCode))
+//        })
+    }
+</script>-->
+</body>
+</html>

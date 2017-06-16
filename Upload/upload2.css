@@ -55,23 +55,31 @@
     right: 6px;
     cursor: pointer;
     font-weight: bold;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA8klEQVRYR+2W0Q3CMAxEXzeADRiBkWADNoENYCQ2YAVGQJHgg4jGd25Q+9H+pYrvXhwn8cDM3zCzPyvAYjPwBE7ArVONHIAzsK31xjJQAq7AsQNEU6u1BT0gQo2oBkKBxhZJsRFA0ZeEKhA5RgFwIWTzIqwCqBCWuQsQQdjmGYAxiJR5FqCGKOP0neHUQH3iPqsu/9MXVg+AtHmvLZj0XmQy0Cq4PXB3HjAXoGW+Ax5uPTgAylFT5nwlSAVwhJ250lVsCb6XJ8dEGZCFfhSeFLvYhkSiF49bqiX7R1N6ATZqUyoubvq0qAinOwQKK8DsGXgBVlFOIUGIrbMAAAAASUVORK5CYII=") no-repeat;
+    background-size:24px 24px;
 }
 .fui-icon-del {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    margin: 4px;
     line-height: 12px;
     text-align: center;
     font-size: 16px;
-    color: #E64340;
     cursor: pointer;
     display: none;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACeUlEQVRYR81XgVEUQRDsjkCNQIhAiUCIQIhAiEAyEDPQCIQIhAiUCIQIhAjUCNrqd/ac29vj7/6oeqbq6qt+d2d6pmd2ZoktC7dsH7MASHoN4B0A/z6PX/twF98NgAuS/p0kkwBIOgbwAcDOJK3/AJ2RvFi3/0EA4fGX5Ok6ffW6I3HyUERGAUg6BGDjDnUt1wC+V3/uA3jT2Ps7QFy20DcBhPGv1YE/AD75I2mlA5FksKfxPas2HJEcgBgAiLB/qzy/AnA8ZrhGEkDOAbxNawZ9UNPRAmDeXqWDzmon4WyRZBCumiI3JPeyoh6AyHbzXuSKpHNhY5HksOdIOCkNbCU1AJfPy1gz5ztTwz6GMOiw3pITdyR3BwCC+x9J0UeSZxu7ng5Ksh7fI0X2Si50EZDkDH+fNr1Y6n3RFVH4lXR/Julq+U+BJNd1qeNbkr5uH00k5eS+Jul7owfAZVJ46hB6U4DTXDQkD1IUcoS7PMgUZAM9/iXNNr7yjsz6e3lQ1p4UgFyCLQrmMuAIrHgOGjMF9yRXnTVHICfh4Maabb06MCUJt16GLrvtXUTBU84Dl+Xu0ssoLqGfqbt2/PdyIAC46+VmdEnyaAn/s5pRgKjb8TnJk01ANNrx4IYdG0hcEXmicUt1G21OQjW4CLsjmVu5u+v+2oEkouD69VSUxcZdKR5QnCsDkeTa9gDiRlPPkp6G6jly/F0gySDseT3b2bBpsrISERvz/lYDs+eHLeODJGyE0grtdWvanZIWnp5PNxrLs/YY1dxMyrS0zvh9PEy60WvswKSXUbrPHRGXanmaleH1NugwLS7dx32arXN3yfqsCCwxNHb2L4ybGjBD44baAAAAAElFTkSuQmCC");
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-color: #E64340;
 }
 
-.fui-close:hover {
+.fui-hover {
     background-color: #E64340;
-    color: #fff;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/0lEQVRYR+2W0Q3CMAxE7zaADRiBkWADNoENYCQ2YIVuYBSplaqK1GenqP1ofxvfvbgXN8TKD1f2xw6wzQ6YWQfgRvK1REbM7ALgTvI41fvZgb7gCeDaCuFpVT+BV6h0RtGYzYAiUANRa90QqkJjkEiNC1CEI4KRtUVbAlAhouYhAA8iYx4GqEFkzVMAU4g+fOmZIWdgetxGuy6v0gNrCYC0+SKfoHVUhzswFzgzO5N8K2N6WBMCcMxPAD7RPMgAylFT1ki/45nEu4GLQrgdiAp6EzPUgYz5YKDWbvNCotIrx83Tqt0J/3EpfZA8hDKg7LB1jXsKWg28+h1g9Q58ASWfxiEHoGKyAAAAAElFTkSuQmCC");
 }
 
 
@@ -86,12 +94,16 @@
     margin-left: 40px;
     border: 1px dotted #999999;
     position: relative;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAC70lEQVRoQ+1YQW7bMBDkCjZg6RRfDIg61P5B8oLGP2hfUPcFbV7Q9AVtX5DkBW1fkOQFcV9QX0QBvti9WAcbZrCBEigWKXJpMW0N6WhzlzM7q+VQwA7kgQPhwVoi/5qSrSKtIp4q0LaWp8I6p3VSZD6fH6/X61dBECzjOL513r3BQBKRLMuGUsoLxthpCcMMAN7HcXzTIC5yKhKRNE3vAOB4dxcp5TIIgpM4jmdkBA0FWBMRQnxkjH2p2fcn5/xNQ7jIaShELhlj72p2mHHOR2QEDQVQiHxljH3Q7Sul/JUkSaXtGsJpTGNNJMuySfGi65Jecc4nxh0VCxaLxRH+3O/3ly7xGGNNBBcLIXAyvVZs9icMw6ErECEEqn3kWggyEaxcnufnOy12CwAT14klhMAB8f0BDMDINQ9JkbISWZad9nq9qasKmAsLs1qtfgPAQ2sxxpzb05mIay+X44QQ1zuHK+t0OieDwWBKzf/XiNScSzec8/F/QQS92mazudOBBYAx1fK8uCLFe3GtsjolYmRVXpxIMWq1B2uJzFvO+Q/bFnMmglOLKj/GSCnxBbd5SJbHiUipx88453iYGR/FqDXGFNcD9HjGx4nIo51H+97tdsc241IIgYce1R1bq0ImstvjUsppFEXjuoPR4gqgrbiU8nOSJOgmah8SkZoe/8Y5x/tK5SmuxTilHk9vE6Zn/6PqURSNTA7Cmkjhs3D2DzVIlFNGd6uksLFRxZqIqcdVlUvT9BwAPlFAq9baqGJFpOxQDaCeDjLiqLXhWmsojUTwy8l2u8WPDrY9fhaG4WWe53VtaAO8sqbO5huJqByqBQq8gJU/GVmEWC3RqlJLZJ+xaQXLYZHO5muJmByqA4amQpSGUkukibHZFPLdPCqbryRCcKi+sJryVlSpEPEwNk2gXP9/dgBXiAgh0G3qTm/XTX3EoaF8+o5mHL8+EPjI2RLxUdV9craK7FM9H7GtIj6quk/OVpF9qucj9mAUuQdTDzFCvAd+NQAAAABJRU5ErkJggg==");
+    background-repeat: no-repeat;
+    background-size: 15%;
+    background-position: 110px center;
 }
 .fui-upload_drag span {
     display: block;
     width: 100%;
     height: 100%;
-    padding-left: 110px;
+    padding-left: 160px;
     text-align: center;
 }
 .fui-upload_drag span:after {
@@ -103,15 +115,7 @@
     text-align: center;
     line-height: 120px;
 }
-.fui-upload_drag span:before {
-    content: '\e614';
-    display: inline-block;
-    float: left;
-    font-family: iconfont;
-    font-size: 40px;
-    line-height: 120px;
-    color: #D9D9D9;
-}
+
 .fui-upload_input-box {
     position: relative;
     margin-top: 40px;
@@ -175,7 +179,6 @@
 }
 .fui-upload_submit {
     color: #fff;
-    border: 1px solid #E64340;
     background-color: #E64340;
 }
 

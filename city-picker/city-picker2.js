@@ -1,7 +1,7 @@
 ;!(function (window, $, undefined) {
 
     /**
-     * @param   {[String]}  $el 选择元素
+     * @param   {[String]}  el 选择元素
      * @param   {[Object]}  opts 自定义皮肤
      * opts = {
             width: 300,
@@ -11,8 +11,11 @@
             hoverColor: '#E64340'
         }
      */
-    var CityPicker = function ($el, opts) {
-        this.$el = $el;
+    var CityPicker = function (el, opts) {
+
+        this.$el = $(el);
+        this.$el.text('1')
+        this.$citySelect = '';
         this.citiesData = window.fui_citiesData;
         // 城市地址信息
         this.addrs = {};
@@ -22,8 +25,6 @@
         this.ids = {};
         // 被选中的地址信息
         this.checkedAddr = {};
-        this.$cityPicker = $('.fui-city-picker');
-        this.$citySelect = $('.city-select');
         // console.log(this.citiesData)
         var defaults = {
             width: 360,
@@ -32,12 +33,13 @@
             color: '#E64340',
             borderColor: '#D9D9D9'
         };
+        this.n = 0;
         this.UIopts = $.extend({}, defaults, opts);
     };
 
     CityPicker.prototype.init = function () {
         this.html();
-
+        this.ui();
         this.togglePicker();
         this.loadProvince();
         this.switchTab();
@@ -46,9 +48,6 @@
 
     CityPicker.prototype.html = function () {
         var html = '<div class="city-select hide">'+
-            '<input type="text" class="city-title" readonly="readonly" placeholder="请选择地址"/>'+
-            '<div class="fui-menu-button-dropdown">'+
-            '</div>'+
             '<div class="fui-city-picker">'+
             '<div class="fui-tab clearfix">'+
             '<a href="#fui-tab1" class="fui-tab_a fui-active">省份</a>'+
@@ -80,13 +79,14 @@
             '</div>'+
             '</div>';
 
-        $(this.$el).html(html);
-        this.ui();
+        this.$el.after(html);
+
     };
     CityPicker.prototype.ui = function () {
-        this.$cityPicker = $('.fui-city-picker');
-        this.$citySelect = $('.city-select');
-        this.$el = this.$el.find('.city-title');
+        this.$citySelect = this.$el.next('.city-select');
+        this.$cityPicker = this.$citySelect.find('.fui-city-picker');
+
+        //this.$el = this.$el.find('.city-title');
         var $picker = this.$cityPicker,
             $citySelect = this.$citySelect,
             UI = this.UIopts;
@@ -109,28 +109,31 @@
         var bgColor = '.fui-tab {' +
             'background-color:' + UI.bgColor+
             '}';
-        var style = '<style>'+
+        var style = '<style class="city-select-ui">'+
             fuiActive + cityPickerChecked+ cityPickerHover+ tabHover+ borderColor+ bgColor+
             '</style>';
+
         $('head').append(style);
 
         // 宽度
-        $citySelect.width(UI.width);
-        $citySelect.height(UI.height);
+
+        $citySelect.css({
+            width: 0,
+            height: 0,
+            border: 0
+        });
         $picker.width(UI.width + 2);
 
         $citySelect.removeClass('hide');
     };
 
     CityPicker.prototype.togglePicker = function () {
-        var $picker = this.$cityPicker;
-        $('.fui-menu-button-dropdown').click(function () {
-            $picker.stop().slideToggle();
-            $(this).toggleClass('fui-rotate')
+        var _this = this;
+
+        _this.$el.click(function () {
+            _this.$cityPicker.stop().slideToggle();
         });
-        $('.city-title').on('click',function () {
-            $('.fui-menu-button-dropdown').triggerHandler('click');
-        })
+
     };
 
     CityPicker.prototype.loadProvince = function () {
@@ -162,19 +165,7 @@
             str2_a = '',
             str3_a = '',
             str4_a = '';
-        // citiesData.forEach(function(item, i, arr) {
-        //   var c = item.c.substring(0,1);
-        //   if(reg1.test(c) || item.name == '重庆') {
-        //     str1_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-        //   }else if(reg2.test(c)) {
-        //     str2_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-        //   }else if(reg3.test(c)) {
-        //     str3_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-        //   }else if(reg4.test(c)) {
-        //     str4_a += ' <a data-id='+item.code+'>'+item.name+'</a>'
-        //   }
 
-        // });
         for(var i = 0; i < citiesData.length; i++) {
             var c = citiesData[i].c.substring(0,1);
             if(reg1.test(c) || citiesData[i].name == '重庆') {
@@ -191,13 +182,13 @@
         var dl_2 = '<dl class="fui-city-H-K clearfix"></dl>';
         var dl_3 = '<dl class="fui-city-L-S clearfix"></dl>';
         var dl_4 = '<dl class="fui-city-T-Z clearfix"></dl>';
-        $('.fui-city-A-G').append('<dd class="fl">'+str1_a+'</dd>');
-        $('.fui-city-H-K').append('<dd class="fl">'+str2_a+'</dd>');
-        $('.fui-city-L-S').append('<dd class="fl">'+str3_a+'</dd>');
-        $('.fui-city-T-Z').append('<dd class="fl">'+str4_a+'</dd>');
+        this.$citySelect.find('.fui-city-A-G').append('<dd class="fl">'+str1_a+'</dd>');
+        this.$citySelect.find('.fui-city-H-K').append('<dd class="fl">'+str2_a+'</dd>');
+        this.$citySelect.find('.fui-city-L-S').append('<dd class="fl">'+str3_a+'</dd>');
+        this.$citySelect.find('.fui-city-T-Z').append('<dd class="fl">'+str4_a+'</dd>');
 
-        $('.fui-city-A-G').find('[data-id="110000"]')
-            .after($('.fui-city-A-G').find('[data-id="500000"]'));
+        this.$citySelect.find('.fui-city-A-G').find('[data-id="110000"]')
+            .after(this.$citySelect.find('.fui-city-A-G').find('[data-id="500000"]'));
     };
 
     // 对城市列表按照首字母进行排序
@@ -242,13 +233,13 @@
     // tab 切换
     CityPicker.prototype.switchTab = function () {
         var _this = this,
-            tabContentItem = $('.fui-tab_container'),
+            tabContentItem = this.$citySelect.find('.fui-tab_container'),
             UI = this.UIopts;
 
         tabContentItem.addClass('hide')
             .eq(0).removeClass('hide');
 
-        $('.fui-tab').on('click', '.fui-tab_a', function () {
+        this.$citySelect.find('.fui-tab').on('click', '.fui-tab_a', function () {
             var $index = $(this).index(),
                 len = $('.fui-tab_a').length;
 
@@ -272,7 +263,7 @@
             _this = this,
             $showTxt = this.$el;
 
-        $('#fui-tab'+ $index).off('click').on('click', 'a', function () {
+        this.$citySelect.find('#fui-tab'+ $index).off('click').on('click', 'a', function () {
 
             var id = $(this).data('id'),
                 xid = 'id'+ $index,
@@ -293,14 +284,14 @@
                 delete _this.checkedAddr['id'+i];
                 delete _this.ids['id'+i];
                 delete _this.addrs['id'+i];
-                $('#fui-tab'+ i).text('');
+                _this.$citySelect.find('#fui-tab'+ i).text('');
             }
             _this.filterCity(_this.ids);
 
             _this.getCityInfo(_this.checkedAddr);
 
             if($index === 3) {
-                $('.fui-menu-button-dropdown').triggerHandler('click');
+                _this.$el.triggerHandler('click');
             }
 
             $(this).parents('.fui-tab_container').find('a').removeClass('fui-city-picker_checked');
@@ -319,7 +310,14 @@
             }
         }
         console.log(str)
-        this.$el.val(str.substring(0, str.length-1));
+        console.log(this.$el.attr('type'))
+
+        if(this.$el.attr('type') != 'undefined') {
+            this.$el.val(str.substring(0, str.length-1));
+        }else {
+            this.$el.text(str.substring(0, str.length-1));
+        }
+
     };
     // 根据城市 ID 筛选下一级城市或地区
     CityPicker.prototype.filterCity = function (opts) {
@@ -374,8 +372,9 @@
         }
     };
     CityPicker.prototype.renderArea = function (citiesData, containerid) {
-        var $container = $(containerid);
-        var str = '',
+        var $container = this.$citySelect.find(containerid);
+        var _this = this,
+            str = '',
             aStr = '',
             UI = this.UIopts;
         if($.isArray(citiesData)) {
@@ -395,12 +394,16 @@
 
             this.chooseCity();
         }else {
-            $('.fui-menu-button-dropdown').triggerHandler('click');
+            _this.$el.triggerHandler('click');
         }
     };
     $.fn.cityPicker = function(opts) {
-        var cityPicker = new CityPicker(this, opts);
-        return cityPicker.init();
+        return this.each(function () {
+            if(!$(this).data('cityPicker')) {
+                var cityPicker = new CityPicker(this, opts);
+                return $(this).data('cityPicker', cityPicker.init())
+            }
+        });
     }
 
 })(window, jQuery);

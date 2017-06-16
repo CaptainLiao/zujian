@@ -17,9 +17,10 @@
         var defaults = {
             debug: false,
             maxLen: 10,
-            maxSize: 6,
+            maxSize: 1,
             maxWidth: 5000,
-            quality: 1
+            quality: 1,
+            bgColor: '#E64340'
         };
         this.$el = $el;
         this.url = url;
@@ -43,10 +44,9 @@
         console.log($('.fui-mask').length>0)
         this.$el.on('click', function() {
 
-
             var mask ='<div class="fui-mask"></div>';
             var upload = '<div class="fui-upload_box">'+
-                '<a class="fui-close iconfont">&#xe6ac;</a>'+
+                '<a class="fui-close"></a>'+
                 '<div class="fui-upload_choose clearfix">'+
                 '<div class="fui-upload_input-box fl">'+
                 '<div>点击选择文件</div>'+
@@ -55,7 +55,7 @@
                 '<div class="fui-upload_drag fl" id="fui-upload_drag"><span class="clearfix2"></span></div>'+
                 '</div>'+
                 '<div class="fui-upload_status-bar clearfix">'+
-                '<div class="fui-upload_info fl">选中 0 个文件，共 0 M</div>'+
+                '<div class="fui-upload_info fl">选中 0 个文件，共 0.00 M</div>'+
                 '<div class="fui-upload_btn fr">'+
                 '<a class="fui-upload_add" type="button">继续添加</a>'+
                 '<a class="fui-upload_submit" type="button">点击上传</a>'+
@@ -67,49 +67,62 @@
                 '</div>';
             $('body').append(mask).append(upload);
 
-
+            _this.initUI();
             _this.change();
-
             _this.dragImg();
-
 
             //submit
             $('.fui-upload_submit').on('click',function() {
                 _this.submit(_this.url, {});
             });
-
             // 继续添加
             $('.fui-upload_add').click(function () {
                 $('#uploadInput').trigger('click');
             });
-
             _this.closeUpload();
         })
     };
 
+    Uploader.prototype.initUI = function () {
+        var _this = this;
+        $('.fui-upload_preview_item').hover(
+            function () {
+                var del = $(this).find('.fui-icon-del');
+                del.stop().fadeIn();
+
+            },
+            function () {
+                var del = $(this).find('.fui-icon-del');
+                del.stop().fadeOut();
+
+            });
+
+        $('.fui-close').hover(
+            function () {
+                var $this = $(this);
+                $this.addClass('fui-hover');
+                $this.css('background-color', _this.options.bgColor)
+            },
+            function () {
+                var $this = $(this);
+                $this.removeClass('fui-hover');
+                $this.css('background-color', 'transparent')
+            }
+        );
+        $('.fui-upload_input-box>div, .fui-upload_submit, .fui-icon-del').css('background-color', this.options.bgColor)
+    };
     Uploader.prototype.dragImg = function () {
         var _this = this,
             dragBox = document.getElementById('fui-upload_drag');
-
-        // 代码段一：很关键！如果没有这段代码且没有代码段二，drop事件的 e.preventDefault() 就失效了。
-        // dragBox.addEventListener('dragover', function (e) {
-        //     e.preventDefault();
-        // }, false);
-
         dragBox.addEventListener('drop', function (e) {
             e.preventDefault();
             var file = e.dataTransfer.files[0];
             _this.previewImg(e.dataTransfer);
         }, false);
 
-        // 代码段二：很关键！防止用户瞎比拖（通过浏览器预览图片）。
-        //拖离
         document.addEventListener('dragleave',function(e){e.preventDefault();});
-        //拖后放
         document.addEventListener('drop',function(e){e.preventDefault();});
-        //拖进
         document.addEventListener('dragenter',function(e){e.preventDefault();});
-        //拖来拖去
         document.addEventListener('dragover',function(e){e.preventDefault();});
     };
     /**
@@ -121,27 +134,10 @@
             isIE = /ie/i.test(navigator.userAgent.toLowerCase()),
             isIE6 = /msie 6.0/i.test(navigator.userAgent.toLowerCase()),
             li = '';
-        if(isIE) {
-            //li += '<li class="fui-upload_preview_item" style="width: 80%;height: 240px;overflow: hidden"><img id="fui-upload_preview_item" style="width:100%"></li>';
-            //document.getElementById('fui-upload_preview').innerHTML = li;
-            console.log(uploadInput)
-            var pic = document.getElementById('fui-upload_preview_item');
-            uploadInput.onchange = function (ev) {
-                uploadInput.select();
-                console.log(1)
-                var reallocalpath = document.selection.createRange().text;
-                console.log(reallocalpath);
-                pic.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='image',src=\"" + reallocalpath + "\")";
-                // 设置img的src为base64编码的透明图片 取消显示浏览器默认图片
-                pic.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
-            };
-
-        }else {
-            uploadInput.addEventListener('change', function (ev) {
-                ev.preventDefault();
-                _this.previewImg(this);
-            });
-        }
+        uploadInput.addEventListener('change', function (ev) {
+            ev.preventDefault();
+            _this.previewImg(this);
+        });
         return this;
     };
     /**
@@ -169,9 +165,10 @@
                 type = file.type,
                 maxSize = _this.options.maxSize;
 
-            _this.fileSize +=file.size;
+
             if(file.size > maxSize*1024*1024){
                 _this._tips('单张图片不能超过'+maxSize+'M');
+
                 return;
             }
             ++_this.n;
@@ -181,39 +178,31 @@
                 return;
             }
 
-            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt='+file.name+'> <a class="fui-icon-del iconfont">&#xe63d;</a></li>';
+            _this.fileSize +=file.size;
 
-            _this.compress(file, type);
+            li +='<li class="fui-upload_preview_item"> <img src='+url+' alt='+file.name+'> <a class="fui-icon-del"></a></li>';
+            _this.images.push(file);
+            //_this.compress(file, type);
 
         });
-
-        // 显示缩略图
         $('.fui-upload_preview').append(li);
-
-        // 删除图片
         _this.del();
-
-        $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
+        _this.showUploadInfo();
     };
 
+    Uploader.prototype.showUploadInfo = function () {
+        var _this = this;
+        $('.fui-upload_info').text('选中 '+ _this.n+' 个文件，共 '+(_this.fileSize/1024/1024).toFixed(2)+' M')
+    };
     Uploader.prototype.del = function () {
         var _this = this;
-        $('.fui-upload_preview_item').hover(
-            function () {
-                var del = $(this).find('.fui-icon-del');
-                del.stop().fadeIn();
-
-            },
-            function () {
-                var del = $(this).find('.fui-icon-del');
-                del.stop().fadeOut();
-
-            });
+        this.initUI();
 
         $('.fui-upload_box').on('click', '.fui-icon-del',function () {
             // 首先移除当前li标签（表面删除）
             var $this = $(this);
             _this.timer = null;
+            console.log(_this.images)
             $this.parent().fadeOut(300);
             _this.timer = setTimeout(function () {
                 $this.parent().remove()
@@ -224,6 +213,8 @@
                 if(blob.name == name) {
                     arr.splice(index,1);
                     --_this.n;
+                    _this.fileSize = _this.fileSize - blob.size;
+                    _this.showUploadInfo();
                 }
             });
         })
@@ -279,7 +270,7 @@
             apiURL = url,
             debug = this.options.debug,
             callback = this.callback;
-
+        console.log(images)
         if(images.length>0) {
             images.forEach(function (img) {
                 fd.append('images', img)
@@ -303,7 +294,6 @@
         }
 
         //_this.updataProgress(fd);
-
         $.ajax({
             url: apiURL,
             type: 'POST',
@@ -318,7 +308,8 @@
                 callback && callback instanceof Function && callback(json);
             },
             error: function (e) {
-                _this._tips(e.statusText)
+                _this._tips('上传失败：'+e.statusText)
+
             },
             complete: function (e) {
 
