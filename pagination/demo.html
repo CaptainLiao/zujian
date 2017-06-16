@@ -11,7 +11,9 @@
 <script src="./pagination.js"></script>
 <script>
     $(function () {
-        $("#pagination-list").pagination(50);
+        $("#pagination-list").pagination(50, function(page) {
+            console.log('page:' +page)
+        });
     })
 </script>
 </body>
