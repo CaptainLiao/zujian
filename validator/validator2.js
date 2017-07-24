@@ -1,3 +1,4 @@
+// http://www.cnblogs.com/fayin/p/6907849.html
 // 验证方法
 var VerifyPolicies = {
     isEmpty: function(value, errMsg) {

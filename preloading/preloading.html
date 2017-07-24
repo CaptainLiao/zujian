@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>网页加载进度条</title>
+
+  <style type="text/css">
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .loading-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+
+      width: 70px;
+      height: 50px;
+    }
+
+    .loading-bar i {
+      display: block;
+      float: left;
+      width: 5px;
+      height: 100%;
+      margin: 0 2px;
+      background-color: blue;
+    }
+    .hide {
+      display: none;
+    }
+    .loading-bar i {
+      animation: scales 1s infinite;
+    }
+    .loading-bar i:nth-child(2) {
+      animation-delay: .1s;
+    }
+    .loading-bar i:nth-child(3) {
+      animation-delay: .2s;
+    }
+    .loading-bar i:nth-child(4) {
+      animation-delay: .3s;
+    }
+    .loading-bar i:nth-child(5) {
+      animation-delay: .4s;
+    }
+    @keyframes scales {
+      0%,100% { transform: scaleY(.2); }
+      20% { transform: scaleY(1);}
+    }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <div class="loading-bar">
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+    </div>
+  </div>
+  <section>
+    <div>
+      <img src="http://img3.imgtn.bdimg.com/it/u=1737320369,1413187978&fm=11&gp=0.jpg">
+      <img src="http://imgsrc.baidu.com/imgad/pic/item/b03533fa828ba61e5e6d4c0d4b34970a304e5915.jpg">
+      <img src="http://tupian.enterdesk.com/2013/mxy/12/11/4/4.jpg">
+      <img src="http://tupian.enterdesk.com/2013/mxy/12/11/4/2.jpg">
+      
+    </div>
+  </section>
+
+  <script type="text/javascript">
+    document.onreadystatechange = function() {
+      if(document.readyState === 'complete') {
+        document.querySelector('.loading').classList.add('hide');
+      }
+    }
+  </script>
+</body>
+</html>
